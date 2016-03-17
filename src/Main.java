@@ -8,29 +8,83 @@ public class Main {
 	
 	public static final HashMap<Character, Integer> letterMapping = new HashMap<Character, Integer>(26);
 	private static final int LETTERS_IN_A_HAND = 7;
-	private static final int MIN_SCORE = 20;
+	private static final int MIN_SCORE = 1;
 
 	public static void main(String[] args) throws FileNotFoundException {
 		setLetterMapping();
 		ArrayList<String> dictionary = processDictionary();
 		Scanner console = new Scanner(System.in);
 		for (;;){
+			String[][] multipliers = getBoardSurroundings(console);
 			char[] handLetters = getHandLetters(console);
 			char boardLetter = getBoardLetter(console);
 			ArrayList<String> allWords = getAllWords(dictionary, handLetters, boardLetter);
 			for (String s : allWords){
-				int score = getScore(s);
+				int score = getScore(s, boardLetter, multipliers);
 				if (score > MIN_SCORE){
-					System.out.println(s + score);
+					System.out.println(s + " " + score);
 				}
 			}
 			System.out.println("--------------------------------");
 		}
 	}
 	
-	private static int getScore(String s) {
-		// TODO Auto-generated method stub
-		return 0;
+	//might not work if there are multiple instances of the boardLetter in the string
+	private static int getScore(String s, char boardLetter, String[][] multipliers) {
+		int indexOfBoardTile = s.indexOf(boardLetter);
+		
+		int wordScore1 = 0;
+		boolean doubleWord = false;
+		boolean tripleWord = false;
+		for (char c : s.toCharArray()){
+			int letterScore = letterMapping.get(c);
+			String factor = multipliers[0][8 - (indexOfBoardTile - s.indexOf(c))];
+			if (factor.equals("dl")){
+				wordScore1 += letterScore * 2;
+			} else if (factor.equals("tl")){
+				wordScore1 += letterScore * 3;
+			} else if (factor.equals("dw")){
+				doubleWord = true;
+			} else if (factor.equals("tw")){
+				tripleWord = true;
+			} else {
+				wordScore1 += letterScore;
+			}
+		}
+		if (doubleWord){
+			wordScore1 *= 2;
+		} 
+		if (tripleWord){
+			wordScore1 *= 3;
+		}
+		
+		int wordScore2 = 0;
+		doubleWord = false;
+		tripleWord = false;
+		
+		for (char c : s.toCharArray()){
+			int letterScore = letterMapping.get(c);
+			String factor = multipliers[1][8 - (indexOfBoardTile - s.indexOf(c))];
+			if (factor.equals("dl")){
+				wordScore2 += letterScore * 2;
+			} else if (factor.equals("tl")){
+				wordScore2 += letterScore * 3;
+			} else if (factor.equals("dw")){
+				doubleWord = true;
+			} else if (factor.equals("tw")){
+				tripleWord = true;
+			} else {
+				wordScore2 += letterScore;
+			}
+		}
+		if (doubleWord){
+			wordScore2 *= 2;
+		} 
+		if (tripleWord){
+			wordScore2 *= 3;
+		}
+		
+		return Math.max(wordScore1, wordScore2);
 	}
 
 	private static ArrayList<String> processDictionary() throws FileNotFoundException {
@@ -74,38 +128,43 @@ public class Main {
 		}
 		return allWords;
 	}
-	public static void getBoardSurroundings(Scanner console){
+	public static String[][] getBoardSurroundings(Scanner console){
 		System.out.println("First Type horizontal multiplyers, then vertical ones");
-		String[][] multiplyers = new String[2][15];
+		String[][] multipliers = new String[2][15];
 		for(int i = 0; i < 2; i++){
 			for(int j = 0; j < 15; j++){
 				if(j == 8){
-					multiplyers[i][j] = "Letter";
+					multipliers[i][j] = "Letter";
 				}else{
-					System.out.print("Next: ");
+					System.out.print("Next " + (i + 1) + " " + (j + 1) + ": ");
 					int a = console.nextInt();
 					switch (a){
 					case 1:
-						multiplyers[i][j] = "Blank";
+						multipliers[i][j] = "Blank";
 						break;
 					case 2:
-						multiplyers[i][j] = "Double Letter";
+						//double letter
+						multipliers[i][j] = "dl";
 						break;
 					case 3:
-						multiplyers[i][j] = "Triple Letter";
+						//triple letter
+						multipliers[i][j] = "tl";
 						break;
 					case 4:
-						multiplyers[i][j] = "Double word";
+						//double word
+						multipliers[i][j] = "dw";
 						break;
 					case 5:
-						multiplyers[i][j] = "Triple word";
+						//triple word
+						multipliers[i][j] = "tw";
 						break;
 					default:
-							multiplyers[i][j] = "error";
+							multipliers[i][j] = "error";
 					}
 				}
 			}
 		}
+		return multipliers;
 	}
 
 	private static boolean check(char wordLetter, char[] handLetters, char boardLetter) {
