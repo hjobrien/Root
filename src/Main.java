@@ -8,6 +8,7 @@ public class Main {
 	
 	public static final HashMap<Character, Integer> letterMapping = new HashMap<Character, Integer>(26);
 	private static final int LETTERS_IN_A_HAND = 7;
+	private static final int MIN_SCORE = 20;
 
 	public static void main(String[] args) throws FileNotFoundException {
 		setLetterMapping();
@@ -17,14 +18,26 @@ public class Main {
 			char[] handLetters = getHandLetters(console);
 			char boardLetter = getBoardLetter(console);
 			ArrayList<String> allWords = getAllWords(dictionary, handLetters, boardLetter);
+			for (String s : allWords){
+				int score = getScore(s);
+				if (score > MIN_SCORE){
+					System.out.println(s + score);
+				}
+			}
+			System.out.println("--------------------------------");
 		}
 	}
 	
+	private static int getScore(String s) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	private static ArrayList<String> processDictionary() throws FileNotFoundException {
 		ArrayList<String> dictionary = new ArrayList<String>();
 		Scanner dictionaryScanner = new Scanner(new File("wordlist.txt"));
 		while (dictionaryScanner.hasNextLine()){
-			dictionary.add(dictionaryScanner.nextLine());
+			dictionary.add(dictionaryScanner.nextLine().toLowerCase());
 		}
 		dictionaryScanner.close();
 		return dictionary;
@@ -46,12 +59,33 @@ public class Main {
 
 	private static ArrayList<String> getAllWords(ArrayList<String> dictionary, char[] handLetters, char boardLetter) {
 		ArrayList<String> allWords = new ArrayList<String>();
-		
-		
+		for (String s : dictionary){
+			if (s.contains(boardLetter + "")){
+				int i = s.length() - 1;
+				boolean allLettersInHand = true;
+				while (allLettersInHand && i >= 0){
+					allLettersInHand = check(s.charAt(i), handLetters, boardLetter);
+					i--;
+				}
+				if (allLettersInHand){
+					allWords.add(s);
+				}
+			}
+		}
 		return allWords;
 	}
 
-	
+	private static boolean check(char wordLetter, char[] handLetters, char boardLetter) {
+		if (wordLetter == boardLetter){
+			return true;
+		} 
+		for (int i = 0; i < handLetters.length; i++){
+			if (wordLetter == handLetters[i]){
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public static void setLetterMapping(){
 		letterMapping.put('a', 1);
