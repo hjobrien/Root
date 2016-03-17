@@ -51,7 +51,7 @@ public class Main {
 	private static char[] getHandLetters(Scanner console) {
 		char[] handLetters = new char[LETTERS_IN_A_HAND];
 		for (int i = 0; i < LETTERS_IN_A_HAND; i++){
-			System.out.print("Next letter: ");
+			System.out.print("Hand letter " + (i + 1) + ": ");
 			handLetters[i] = console.next().charAt(0);
 		}
 		return handLetters;
