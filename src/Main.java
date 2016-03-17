@@ -74,6 +74,39 @@ public class Main {
 		}
 		return allWords;
 	}
+	public static void getBoardSurroundings(Scanner console){
+		System.out.println("First Type horizontal multiplyers, then vertical ones");
+		String[][] multiplyers = new String[2][15];
+		for(int i = 0; i < 2; i++){
+			for(int j = 0; j < 15; j++){
+				if(j == 8){
+					multiplyers[i][j] = "Letter";
+				}else{
+					System.out.print("Next: ");
+					int a = console.nextInt();
+					switch (a){
+					case 1:
+						multiplyers[i][j] = "Blank";
+						break;
+					case 2:
+						multiplyers[i][j] = "Double Letter";
+						break;
+					case 3:
+						multiplyers[i][j] = "Triple Letter";
+						break;
+					case 4:
+						multiplyers[i][j] = "Double word";
+						break;
+					case 5:
+						multiplyers[i][j] = "Triple word";
+						break;
+					default:
+							multiplyers[i][j] = "error";
+					}
+				}
+			}
+		}
+	}
 
 	private static boolean check(char wordLetter, char[] handLetters, char boardLetter) {
 		if (wordLetter == boardLetter){
