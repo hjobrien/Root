@@ -122,12 +122,41 @@ public class Main {
 					i--;
 				}
 				if (allLettersInHand){
-					allWords.add(s);
+					if (noDuplicates(s, handLetters, boardLetter)){
+						allWords.add(s);
+					}
 				}
 			}
 		}
 		return allWords;
 	}
+	
+	private static boolean noDuplicates(String s, char[] handLetters, char boardLetter) {
+		//in progress
+//		ArrayList<Character> allLetters = new ArrayList<Character>();
+//		for (char c : handLetters){
+//			allLetters.add(c);
+//		}
+//		allLetters.add(boardLetter);
+//		
+//		for (int i = s.length() - 1; i >= 0; i--){
+//			int j = s.length() - 1;
+//			boolean charFound = false;
+//			while (!charFound )
+//			for (char c : allLetters){
+//				if (s.charAt(i) == c){
+//					charFound = true;
+//					allLetters.remove(index)
+//				}
+//			}
+//			if (charFound = false){
+//				
+//			}
+//		}
+//		
+		return true;
+	}
+
 	public static String[][] getBoardSurroundings(Scanner console){
 		System.out.println("First Type horizontal multiplyers, then vertical ones");
 		String[][] multipliers = new String[2][15];
