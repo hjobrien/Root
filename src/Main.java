@@ -1,19 +1,58 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Main {
 	
-	//should contain all the letters in the player's pile PLUS the tile on the board that
-	//you wish to use in your word
-	char[] letters = new char[]{
-			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'
-	};
-	
 	public static final HashMap<Character, Integer> letterMapping = new HashMap<Character, Integer>(26);
+	private static final int LETTERS_IN_A_HAND = 7;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		setLetterMapping();
+		ArrayList<String> dictionary = processDictionary();
+		Scanner console = new Scanner(System.in);
+		for (;;){
+			char[] handLetters = getHandLetters(console);
+			char boardLetter = getBoardLetter(console);
+			ArrayList<String> allWords = getAllWords(dictionary, handLetters, boardLetter);
+		}
 	}
 	
+	private static ArrayList<String> processDictionary() throws FileNotFoundException {
+		ArrayList<String> dictionary = new ArrayList<String>();
+		Scanner dictionaryScanner = new Scanner(new File("wordlist.txt"));
+		while (dictionaryScanner.hasNextLine()){
+			dictionary.add(dictionaryScanner.nextLine());
+		}
+		dictionaryScanner.close();
+		return dictionary;
+	}
+
+	private static char getBoardLetter(Scanner console) {
+		System.out.print("Board letter: ");
+		return console.next().charAt(0);
+	}
+
+	private static char[] getHandLetters(Scanner console) {
+		char[] handLetters = new char[LETTERS_IN_A_HAND];
+		for (int i = 0; i < LETTERS_IN_A_HAND; i++){
+			System.out.print("Next letter: ");
+			handLetters[i] = console.next().charAt(0);
+		}
+		return handLetters;
+	}
+
+	private static ArrayList<String> getAllWords(ArrayList<String> dictionary, char[] handLetters, char boardLetter) {
+		ArrayList<String> allWords = new ArrayList<String>();
+		
+		
+		return allWords;
+	}
+
+	
+
 	public static void setLetterMapping(){
 		letterMapping.put('a', 1);
 		letterMapping.put('b', 3);
