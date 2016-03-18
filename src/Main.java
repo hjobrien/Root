@@ -166,7 +166,13 @@ public class Main {
 				if(j == 8){
 					multipliers[i][j] = "Letter";
 				}else{
-					System.out.print("Next " + (i + 1) + " " + (j + 1) + ": ");
+					String s;
+					if (i == 0){
+						s = "Horizontal";
+					} else {
+						s = "Vertical";
+					}
+					System.out.print(s + " #" + (j + 1) + ": ");
 					int a = console.nextInt();
 					switch (a){
 					case 1:
