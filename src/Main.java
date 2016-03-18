@@ -14,6 +14,10 @@ public class Main {
 		setLetterMapping();
 		ArrayList<String> dictionary = processDictionary();
 		Scanner console = new Scanner(System.in);
+		System.out.print("Enter by hand or from file? (0 for hand, other for file) ");
+		if (!console.nextLine().equals("0")){
+			console = new Scanner(new File("sampleBoard.txt"));
+		}
 		for (;;){
 			String[][] multipliers = getBoardSurroundings(console);
 			char[] handLetters = getHandLetters(console);
@@ -106,6 +110,8 @@ public class Main {
 			System.out.print("please type again: ");
 			c = console.next().charAt(0);
 		}
+		//since this is the last part of the data entry, a blank line lets you see the results clearly
+		System.out.println();
 		return c;
 	}
 
