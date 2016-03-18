@@ -41,7 +41,6 @@ public class Main {
 		}
 	}
 	
-	//might not work if there are multiple instances of the boardLetter in the string
 	private static int getScore(String s, char boardLetter, TileType[][] multipliers) {
 		
 		int wordScore1 = getWordScore(s, boardLetter, multipliers, 0);
@@ -51,7 +50,10 @@ public class Main {
 	}
 
 	private static int getWordScore(String s, char boardLetter, TileType[][] multipliers, int index) {
+		
+		//might not work if there are multiple instances of the boardLetter in the string
 		int indexOfBoardTile = s.indexOf(boardLetter);
+		
 		int wordScore = 0;
 		boolean doubleWord = false;
 		boolean tripleWord = false;
@@ -81,6 +83,8 @@ public class Main {
 		if (tripleWord){
 			wordScore *= 3;
 		}
+		
+		//50 point scrabble bonus for using all letters
 		if (s.length() == 8){
 			wordScore += 50;
 		}
