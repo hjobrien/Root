@@ -77,6 +77,10 @@ public class Main {
 				wordIsPlayable = false;
 			}
 		}
+		
+		if (!wordIsPlayable){
+			return -1;
+		}
 		if (doubleWord){
 			wordScore *= 2;
 		} 
@@ -87,9 +91,6 @@ public class Main {
 		//50 point scrabble bonus for using all letters
 		if (s.length() == 8){
 			wordScore += 50;
-		}
-		if (!wordIsPlayable){
-			wordScore = -1;
 		}
 		return wordScore;
 	}
