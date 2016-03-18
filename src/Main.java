@@ -90,6 +90,10 @@ public class Main {
 			wordScore2 *= 3;
 		}
 		
+		//seven letters and board letter
+		if (s.length() == 8){
+			return Math.max(wordScore1, wordScore2) + 50;
+		}
 		return Math.max(wordScore1, wordScore2);
 	}
 
