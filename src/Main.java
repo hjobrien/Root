@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -19,101 +20,74 @@ public class Main {
 			console = new Scanner(new File("sampleBoard.txt"));
 		}
 		for (;;){
-			String[][] multipliers = getBoardSurroundings(console);
+			TileType[][] multipliers = getBoardSurroundings(console);
 			char[] handLetters = getHandLetters(console);
 			char boardLetter = getBoardLetter(console);
 			ArrayList<String> allWords = getAllWords(dictionary, handLetters, boardLetter);
+			ArrayList<Word> allHighScoringWords = new ArrayList<Word>();
 			for (String s : allWords){
-				int score = getScore(s, boardLetter, multipliers);
-				if (score > MIN_SCORE){
-					System.out.println(s + " " + score);
+				Word w = new Word(s, getScore(s, boardLetter, multipliers));
+				if (w.getScore() > MIN_SCORE){
+					allHighScoringWords.add(w);
 				}
 			}
+			
+			Collections.sort(allHighScoringWords);
+			for (Word w : allHighScoringWords){
+				System.out.println(w);
+			}
+			
 			System.out.println("--------------------------------");
 		}
 	}
 	
 	//might not work if there are multiple instances of the boardLetter in the string
-	private static int getScore(String s, char boardLetter, String[][] multipliers) {
+	private static int getScore(String s, char boardLetter, TileType[][] multipliers) {
 		
+		int wordScore1 = getWordScore(s, boardLetter, multipliers, 0);
+		int wordScore2 = getWordScore(s, boardLetter, multipliers, 1);
 		
-		if (s.equals("blacker")){
-			System.out.println("blacker");
-		}
-		
-		//what happens if there are two occurrences of boardLetter in the string?
+		return Math.max(wordScore1, wordScore2);
+	}
+
+	private static int getWordScore(String s, char boardLetter, TileType[][] multipliers, int index) {
 		int indexOfBoardTile = s.indexOf(boardLetter);
-		
-		int wordScore1 = 0;
+		int wordScore = 0;
 		boolean doubleWord = false;
 		boolean tripleWord = false;
-		boolean word1IsPlayable = true;
+		boolean wordIsPlayable = true;
 		for (char c : s.toCharArray()){
 			int letterScore = letterMapping.get(c);
-			String factor = multipliers[0][7 - (indexOfBoardTile - s.indexOf(c))];
-			if (factor.equals("dl")){
-				wordScore1 += letterScore * 2;
-			} else if (factor.equals("tl")){
-				wordScore1 += letterScore * 3;
-			} else if (factor.equals("dw")){
-				doubleWord = true;
-			} else if (factor.equals("tw")){
-				tripleWord = true;
-			} else if (factor.equals("n/a")){
-				word1IsPlayable = false;
-			} else {
-				wordScore1 += letterScore;
+			TileType factor = multipliers[index][7 - (indexOfBoardTile - s.indexOf(c))];
+			if (factor.getValue() == 1 || factor.getValue() == 4 || factor.getValue() == 5){
+				wordScore += letterScore;
+				if (factor.getValue() == 4){
+					doubleWord = true;
+				}
+				if (factor.getValue() == 5){
+					tripleWord = true;
+				}
+			} else if (factor.getValue() == 2){
+				wordScore += letterScore * 2;
+			} else if (factor.getValue() == 3){
+				wordScore += letterScore * 3;
+			} else if (factor.getValue() == 0){
+				wordIsPlayable = false;
 			}
 		}
 		if (doubleWord){
-			wordScore1 *= 2;
+			wordScore *= 2;
 		} 
 		if (tripleWord){
-			wordScore1 *= 3;
+			wordScore *= 3;
 		}
-		if (!word1IsPlayable){
-			wordScore1 = -51;
-		}
-		
-		int wordScore2 = 0;
-		doubleWord = false;
-		tripleWord = false;
-		
-		boolean word2IsPlayable = true;
-		for (char c : s.toCharArray()){
-			int letterScore = letterMapping.get(c);
-			String factor = multipliers[1][7 - (indexOfBoardTile - s.indexOf(c))];
-			if (factor.equals("dl")){
-				wordScore2 += letterScore * 2;
-			} else if (factor.equals("tl")){
-				wordScore2 += letterScore * 3;
-			} else if (factor.equals("dw")){
-				doubleWord = true;
-			} else if (factor.equals("tw")){
-				tripleWord = true;
-			} else if (factor.equals("n/a")){
-				word2IsPlayable = false;
-			} else {
-				wordScore2 += letterScore;
-			}
-		}
-		if (doubleWord){
-			wordScore2 *= 2;
-		} 
-		if (tripleWord){
-			wordScore2 *= 3;
-		}
-		
-
-		if (!word2IsPlayable){
-			wordScore2 = -51;
-		}
-		
-		//seven letters and board letter
 		if (s.length() == 8){
-			return Math.max(wordScore1, wordScore2) + 50;
+			wordScore += 50;
 		}
-		return Math.max(wordScore1, wordScore2);
+		if (!wordIsPlayable){
+			wordScore = -1;
+		}
+		return wordScore;
 	}
 
 	private static ArrayList<String> processDictionary() throws FileNotFoundException {
@@ -197,14 +171,14 @@ public class Main {
 		return true;
 	}
 
-	public static String[][] getBoardSurroundings(Scanner console){
+	public static TileType[][] getBoardSurroundings(Scanner console){
 		System.out.println("First Type horizontal multiplyers, then vertical ones");
 		System.out.println("1: blank, 2: double letter, 3: triple letter, 4: double word, 5: triple word.");
-		String[][] multipliers = new String[2][15];
+		TileType[][] multipliers = new TileType[2][15];
 		for(int i = 0; i < 2; i++){
 			for(int j = 0; j < 15; j++){
 				if(j == 7){
-					multipliers[i][j] = "Letter";
+					multipliers[i][j] = TileType.BOARD_LETTER;
 				}else{
 					String s;
 					if (i == 0){
@@ -220,30 +194,30 @@ public class Main {
 					}
 					switch (a){
 					case 1:
-						multipliers[i][j] = "Blank";
+						multipliers[i][j] = TileType.BLANK;
 						break;
 					case 2:
 						//double letter
-						multipliers[i][j] = "dl";
+						multipliers[i][j] = TileType.DOUBLE_LETTER;
 						break;
 					case 3:
 						//triple letter
-						multipliers[i][j] = "tl";
+						multipliers[i][j] = TileType.TRIPLE_LETTER;
 						break;
 					case 4:
 						//double word
-						multipliers[i][j] = "dw";
+						multipliers[i][j] = TileType.DOUBLE_WORD;
 						break;
 					case 5:
 						//triple word
-						multipliers[i][j] = "tw";
+						multipliers[i][j] = TileType.TRIPLE_WORD;
 						break;
 					case 0:
 						//no tile space (off board)
-						multipliers[i][j] = "n/a";
+						multipliers[i][j] = TileType.DOESNT_EXIST;
 						break;
 					default:
-							multipliers[i][j] = "error";
+							throw new RuntimeException();
 					}
 				}
 			}
