@@ -36,15 +36,21 @@ public class Main {
 	//might not work if there are multiple instances of the boardLetter in the string
 	private static int getScore(String s, char boardLetter, String[][] multipliers) {
 		
+		
+		if (s.equals("blacker")){
+			System.out.println("blacker");
+		}
+		
 		//what happens if there are two occurrences of boardLetter in the string?
 		int indexOfBoardTile = s.indexOf(boardLetter);
 		
 		int wordScore1 = 0;
 		boolean doubleWord = false;
 		boolean tripleWord = false;
+		boolean word1IsPlayable = true;
 		for (char c : s.toCharArray()){
 			int letterScore = letterMapping.get(c);
-			String factor = multipliers[0][8 - (indexOfBoardTile - s.indexOf(c))];
+			String factor = multipliers[0][7 - (indexOfBoardTile - s.indexOf(c))];
 			if (factor.equals("dl")){
 				wordScore1 += letterScore * 2;
 			} else if (factor.equals("tl")){
@@ -53,6 +59,8 @@ public class Main {
 				doubleWord = true;
 			} else if (factor.equals("tw")){
 				tripleWord = true;
+			} else if (factor.equals("n/a")){
+				word1IsPlayable = false;
 			} else {
 				wordScore1 += letterScore;
 			}
@@ -63,14 +71,18 @@ public class Main {
 		if (tripleWord){
 			wordScore1 *= 3;
 		}
+		if (!word1IsPlayable){
+			wordScore1 = -51;
+		}
 		
 		int wordScore2 = 0;
 		doubleWord = false;
 		tripleWord = false;
 		
+		boolean word2IsPlayable = true;
 		for (char c : s.toCharArray()){
 			int letterScore = letterMapping.get(c);
-			String factor = multipliers[1][8 - (indexOfBoardTile - s.indexOf(c))];
+			String factor = multipliers[1][7 - (indexOfBoardTile - s.indexOf(c))];
 			if (factor.equals("dl")){
 				wordScore2 += letterScore * 2;
 			} else if (factor.equals("tl")){
@@ -79,6 +91,8 @@ public class Main {
 				doubleWord = true;
 			} else if (factor.equals("tw")){
 				tripleWord = true;
+			} else if (factor.equals("n/a")){
+				word2IsPlayable = false;
 			} else {
 				wordScore2 += letterScore;
 			}
@@ -88,6 +102,11 @@ public class Main {
 		} 
 		if (tripleWord){
 			wordScore2 *= 3;
+		}
+		
+
+		if (!word2IsPlayable){
+			wordScore2 = -51;
 		}
 		
 		//seven letters and board letter
@@ -184,7 +203,7 @@ public class Main {
 		String[][] multipliers = new String[2][15];
 		for(int i = 0; i < 2; i++){
 			for(int j = 0; j < 15; j++){
-				if(j == 8){
+				if(j == 7){
 					multipliers[i][j] = "Letter";
 				}else{
 					String s;
@@ -218,6 +237,10 @@ public class Main {
 					case 5:
 						//triple word
 						multipliers[i][j] = "tw";
+						break;
+					case 0:
+						//no tile space (off board)
+						multipliers[i][j] = "n/a";
 						break;
 					default:
 							multipliers[i][j] = "error";
