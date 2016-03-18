@@ -101,14 +101,24 @@ public class Main {
 
 	private static char getBoardLetter(Scanner console) {
 		System.out.print("Board letter: ");
-		return console.next().charAt(0);
+		char c = console.next().charAt(0);
+		while (c > 122 || c < 97){
+			System.out.print("please type again: ");
+			c = console.next().charAt(0);
+		}
+		return c;
 	}
 
 	private static char[] getHandLetters(Scanner console) {
 		char[] handLetters = new char[LETTERS_IN_A_HAND];
 		for (int i = 0; i < LETTERS_IN_A_HAND; i++){
 			System.out.print("Hand letter " + (i + 1) + ": ");
-			handLetters[i] = console.next().charAt(0);
+			char c = console.next().charAt(0);
+			while (c > 122 || c < 97){
+				System.out.print("please type again: ");
+				c = console.next().charAt(0);
+			}
+			handLetters[i] = c;
 		}
 		return handLetters;
 	}
@@ -160,6 +170,7 @@ public class Main {
 
 	public static String[][] getBoardSurroundings(Scanner console){
 		System.out.println("First Type horizontal multiplyers, then vertical ones");
+		System.out.println("1: blank, 2: double letter, 3: triple letter, 4: double word, 5: triple word.");
 		String[][] multipliers = new String[2][15];
 		for(int i = 0; i < 2; i++){
 			for(int j = 0; j < 15; j++){
@@ -174,6 +185,10 @@ public class Main {
 					}
 					System.out.print(s + " #" + (j + 1) + ": ");
 					int a = console.nextInt();
+					while (a > 5 || a < 0){
+						System.out.print("please type again: ");
+						a = console.nextInt();
+					}
 					switch (a){
 					case 1:
 						multipliers[i][j] = "Blank";
