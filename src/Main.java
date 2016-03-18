@@ -8,7 +8,7 @@ public class Main {
 	
 	public static final HashMap<Character, Integer> letterMapping = new HashMap<Character, Integer>(26);
 	private static final int LETTERS_IN_A_HAND = 7;
-	private static final int MIN_SCORE = 1;
+	private static final int MIN_SCORE = 10;
 
 	public static void main(String[] args) throws FileNotFoundException {
 		setLetterMapping();
@@ -31,6 +31,8 @@ public class Main {
 	
 	//might not work if there are multiple instances of the boardLetter in the string
 	private static int getScore(String s, char boardLetter, String[][] multipliers) {
+		
+		//what happens if there are two occurrences of boardLetter in the string?
 		int indexOfBoardTile = s.indexOf(boardLetter);
 		
 		int wordScore1 = 0;
@@ -132,28 +134,27 @@ public class Main {
 	}
 	
 	private static boolean noDuplicates(String s, char[] handLetters, char boardLetter) {
-		//in progress
-//		ArrayList<Character> allLetters = new ArrayList<Character>();
-//		for (char c : handLetters){
-//			allLetters.add(c);
-//		}
-//		allLetters.add(boardLetter);
-//		
-//		for (int i = s.length() - 1; i >= 0; i--){
-//			int j = s.length() - 1;
-//			boolean charFound = false;
-//			while (!charFound )
-//			for (char c : allLetters){
-//				if (s.charAt(i) == c){
-//					charFound = true;
-//					allLetters.remove(index)
-//				}
-//			}
-//			if (charFound = false){
-//				
-//			}
-//		}
-//		
+		ArrayList<Character> allLetters = new ArrayList<Character>();
+		for (char c : handLetters){
+			allLetters.add(c);
+		}
+		allLetters.add(boardLetter);
+		
+		for (int i = s.length() - 1; i >= 0; i--){
+			int j = allLetters.size() - 1;
+			boolean charFound = false;
+			while (!charFound && j >= 0){
+				if (s.charAt(i) == allLetters.get(j)){
+					allLetters.remove(j);
+					charFound = true;
+				}
+				j--;
+			}
+			if (!charFound){
+				return false;
+			}
+		}
+		
 		return true;
 	}
 
