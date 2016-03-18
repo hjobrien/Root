@@ -60,7 +60,7 @@ public class Main {
 		boolean wordIsPlayable = true;
 		for (char c : s.toCharArray()){
 			int letterScore = letterMapping.get(c);
-			TileType factor = multipliers[index][7 - (indexOfBoardTile - s.indexOf(c))];
+			TileType factor = multipliers[index][LETTERS_IN_A_HAND - (indexOfBoardTile - s.indexOf(c))];
 			if (factor.getValue() == 1 || factor.getValue() == 4 || factor.getValue() == 5){
 				wordScore += letterScore;
 				if (factor.getValue() == 4){
@@ -182,7 +182,7 @@ public class Main {
 		TileType[][] multipliers = new TileType[2][15];
 		for(int i = 0; i < 2; i++){
 			for(int j = 0; j < 15; j++){
-				if(j == 7){
+				if(j == LETTERS_IN_A_HAND){
 					multipliers[i][j] = TileType.BOARD_LETTER;
 				}else{
 					String s;
