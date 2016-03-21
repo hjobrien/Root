@@ -19,6 +19,8 @@ public class Processor {
 			int boardLetterY) throws FileNotFoundException {
 		setLetterMapping();
 		ArrayList<String> dictionary = processDictionary();
+		
+		//finding the words that are generated using the board letter
 		TileType[][] multipliersWithBoardLetter = getMultipliersWithBoardLetter(board, boardLetterX, 
 				boardLetterY);
 		ArrayList<String> allWordsWithBoardLetter = getAllWordsWithBoardLetter(dictionary, handLetters, 
@@ -26,6 +28,44 @@ public class Processor {
 		ArrayList<Word> allHighScoringWords = new ArrayList<Word>();
 		for (String s : allWordsWithBoardLetter){
 			Word w = new Word(s, getScore(s, boardLetter, multipliersWithBoardLetter));
+			if (w.getScore() > MIN_SCORE){
+				allHighScoringWords.add(w);
+			}
+		}
+		
+		//left down, right down, up across, down across	
+		//TODO
+		TileType[] multipliersLeftDown = getMultipliersDown(board, boardLetterX - 1);
+		ArrayList<String> allWordsLeftDown = getAllWordsLeftDown();
+		for (String s : allWordsLeftDown){
+			Word w = new Word(s, getScore(s, boardLetterY, multipliersLeftDown));
+			if (w.getScore() > MIN_SCORE){
+				allHighScoringWords.add(w);
+			}
+		}
+		
+		TileType[] multipliersRightDown = getMultipliersDown(board, boardLetterX + 1);
+		ArrayList<String> allWordsRightDown = getAllWordsRightDown();
+		for (String s : allWordsRightDown){
+			Word w = new Word(s, getScore(s, boardLetterY, multipliersRightDown));
+			if (w.getScore() > MIN_SCORE){
+				allHighScoringWords.add(w);
+			}
+		}
+		
+		TileType[][] multipliersUpAcross = getMultipliersAcross(board, boardLetterY - 1);
+		ArrayList<String> allWordsUpAcross = getAllWordsAcross();
+		for (String s : allWordsUpAcross){
+			Word w = new Word(s, getScore(s, boardLetterX, multipliersUpAcross));
+			if (w.getScore() > MIN_SCORE){
+				allHighScoringWords.add(w);
+			}
+		}
+		
+		TileType[][] multipliersDownAcross = getMultipliersAcross(board, boardLetterY + 1);
+		ArrayList<String> allWordsDownAcross = getAllWordsDownAcross();
+		for (String s : allWordsDownAcross){
+			Word w = new Word(s, getScore(s, boardLetterY, multipliersDownAcross));
 			if (w.getScore() > MIN_SCORE){
 				allHighScoringWords.add(w);
 			}
@@ -87,9 +127,13 @@ public class Processor {
 		if (tripleWord){
 			wordScore *= 3;
 		}
-		
+
 		//50 point scrabble bonus for using all letters
-		if (s.length() == 8){
+		if (s.contains(boardLetter + "")) {
+			if (s.length() == 8){
+				wordScore += 50;
+			}
+		} else if (s.length() == 7){
 			wordScore += 50;
 		}
 		return wordScore;
@@ -156,8 +200,22 @@ public class Processor {
 		TileType[][] multipliers = new TileType[2][15];
 
 		for (int i = 0; i < Board.SIZE; i++){
-			multipliers[0][i] = board[boardLetterY][boardLetterX - (Board.SIZE / 2) + i];
-			multipliers[1][i] = board[boardLetterY - (Board.SIZE / 2) + i][boardLetterX];
+			
+			//horizontal
+			int xCoord = boardLetterX - (Board.SIZE / 2) + i;
+			if (xCoord < 0){
+				multipliers[0][i] = TileType.DOESNT_EXIST;
+			} else {	
+				multipliers[0][i] = board[boardLetterY][boardLetterX - (Board.SIZE / 2) + i];
+			}
+			
+			//vertical
+			int yCoord = boardLetterY - (Board.SIZE / 2) + i;
+			if (yCoord < 0){
+				multipliers[1][i] = TileType.DOESNT_EXIST;
+			} else {
+				multipliers[1][i] = board[boardLetterY - (Board.SIZE / 2) + i][boardLetterX];
+			}
 		}
 		
 		return multipliers;
