@@ -1,3 +1,5 @@
+package runner;
+
 
 public class Word implements Comparable<Object>{
 	private String word;

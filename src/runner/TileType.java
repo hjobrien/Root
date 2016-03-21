@@ -1,3 +1,5 @@
+package runner;
+
 
 public enum TileType {
 	DOESNT_EXIST(0),				//0

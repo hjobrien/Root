@@ -1,3 +1,5 @@
+package runner;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -5,41 +7,32 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Main {
-	
+public class Processor {
 	public static final HashMap<Character, Integer> letterMapping = new HashMap<Character, Integer>(26);
 	private static final int LETTERS_IN_A_HAND = 7;
 	private static final int MIN_SCORE = 10;
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void run(TileType[][] vertical, TileType[][] horizontal, char[] handLetters, char boardLetter) throws FileNotFoundException {
 		setLetterMapping();
 		ArrayList<String> dictionary = processDictionary();
-		Scanner console = new Scanner(System.in);
-		System.out.print("Enter by hand or from file? (0 for hand, other for file) ");
-		if (!console.nextLine().equals("0")){
-			console = new Scanner(new File("sampleBoard.txt"));
-		}
-		for (;;){
-			TileType[][] multipliers = getBoardSurroundings(console);
-			char[] handLetters = getHandLetters(console);
-			char boardLetter = getBoardLetter(console);
-			ArrayList<String> allWords = getAllWords(dictionary, handLetters, boardLetter);
-			ArrayList<Word> allHighScoringWords = new ArrayList<Word>();
-			for (String s : allWords){
-				Word w = new Word(s, getScore(s, boardLetter, multipliers));
-				if (w.getScore() > MIN_SCORE){
-					allHighScoringWords.add(w);
-				}
+		TileType[][] multipliers = getBoardSurroundings(console);
+		ArrayList<String> allWords = getAllWords(dictionary, handLetters, boardLetter);
+		ArrayList<Word> allHighScoringWords = new ArrayList<Word>();
+		for (String s : allWords){
+			Word w = new Word(s, getScore(s, boardLetter, multipliers));
+			if (w.getScore() > MIN_SCORE){
+				allHighScoringWords.add(w);
 			}
-			
-			Collections.sort(allHighScoringWords);
-			for (Word w : allHighScoringWords){
-				System.out.println(w);
-			}
-			
-			System.out.println("--------------------------------");
 		}
+		
+		Collections.sort(allHighScoringWords);
+		for (Word w : allHighScoringWords){
+			System.out.println(w);
+		}
+		
+		System.out.println("--------------------------------");
 	}
+
 	
 	private static int getScore(String s, char boardLetter, TileType[][] multipliers) {
 		
@@ -270,5 +263,4 @@ public class Main {
 		letterMapping.put('y', 4);
 		letterMapping.put('z', 10);
 	}
-
 }
