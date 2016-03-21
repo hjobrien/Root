@@ -35,7 +35,7 @@ public class Processor {
 		
 		//left down, right down, up across, down across	
 		//TODO
-		TileType[] multipliersLeftDown = getMultipliersDown(board, boardLetterX - 1);
+		TileType[] multipliersLeftDown = getMultipliersDown(board, boardLetterX - 1, boardLetterY);
 		ArrayList<String> allWordsLeftDown = getAllWordsLeftDown();
 		for (String s : allWordsLeftDown){
 			Word w = new Word(s, getScore(s, boardLetterY, multipliersLeftDown));
@@ -44,7 +44,7 @@ public class Processor {
 			}
 		}
 		
-		TileType[] multipliersRightDown = getMultipliersDown(board, boardLetterX + 1);
+		TileType[] multipliersRightDown = getMultipliersDown(board, boardLetterX + 1, boardLetterY);
 		ArrayList<String> allWordsRightDown = getAllWordsRightDown();
 		for (String s : allWordsRightDown){
 			Word w = new Word(s, getScore(s, boardLetterY, multipliersRightDown));
@@ -53,7 +53,7 @@ public class Processor {
 			}
 		}
 		
-		TileType[][] multipliersUpAcross = getMultipliersAcross(board, boardLetterY - 1);
+		TileType[][] multipliersUpAcross = getMultipliersAcross(board, boardLetterY - 1, boardLetterX);
 		ArrayList<String> allWordsUpAcross = getAllWordsAcross();
 		for (String s : allWordsUpAcross){
 			Word w = new Word(s, getScore(s, boardLetterX, multipliersUpAcross));
@@ -62,7 +62,7 @@ public class Processor {
 			}
 		}
 		
-		TileType[][] multipliersDownAcross = getMultipliersAcross(board, boardLetterY + 1);
+		TileType[][] multipliersDownAcross = getMultipliersAcross(board, boardLetterY + 1, boardLetterX);
 		ArrayList<String> allWordsDownAcross = getAllWordsDownAcross();
 		for (String s : allWordsDownAcross){
 			Word w = new Word(s, getScore(s, boardLetterY, multipliersDownAcross));
