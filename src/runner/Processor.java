@@ -7,19 +7,21 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import graphics.Board;
+
 public class Processor {
 	public static final HashMap<Character, Integer> letterMapping = new HashMap<Character, Integer>(26);
 	private static final int LETTERS_IN_A_HAND = 7;
 	private static final int MIN_SCORE = 10;
 
-	public static void run(TileType[][] vertical, TileType[][] horizontal, char[] handLetters, char boardLetter) throws FileNotFoundException {
+	public static void run(TileType[][] board, char[] handLetters, char boardLetter, int boardLetterX, int boardLetterY) throws FileNotFoundException {
 		setLetterMapping();
 		ArrayList<String> dictionary = processDictionary();
-		TileType[][] multipliers = getBoardSurroundings(console);
-		ArrayList<String> allWords = getAllWords(dictionary, handLetters, boardLetter);
+		TileType[][] multipliersWithBoardLetter = getMultipliersWithBoardLetter(board, boardLetterX, boardLetterY);
+		ArrayList<String> allWordsWithBoardLetter = getAllWordsWithBoardLetter(dictionary, handLetters, boardLetter);
 		ArrayList<Word> allHighScoringWords = new ArrayList<Word>();
-		for (String s : allWords){
-			Word w = new Word(s, getScore(s, boardLetter, multipliers));
+		for (String s : allWordsWithBoardLetter){
+			Word w = new Word(s, getScore(s, boardLetter, multipliersWithBoardLetter));
 			if (w.getScore() > MIN_SCORE){
 				allHighScoringWords.add(w);
 			}
@@ -54,7 +56,7 @@ public class Processor {
 		for (char c : s.toCharArray()){
 			int letterScore = letterMapping.get(c);
 			TileType factor = multipliers[index][LETTERS_IN_A_HAND - (indexOfBoardTile - s.indexOf(c))];
-			if (factor.getValue() == 1 || factor.getValue() == 4 || factor.getValue() == 5){
+			if (factor.getValue() == 1 || factor.getValue() == 4 || factor.getValue() == 5 || factor.getValue() == 7){
 				wordScore += letterScore;
 				if (factor.getValue() == 4){
 					doubleWord = true;
@@ -98,33 +100,7 @@ public class Processor {
 		return dictionary;
 	}
 
-	private static char getBoardLetter(Scanner console) {
-		System.out.print("Board letter: ");
-		char c = console.next().charAt(0);
-		while (c > 122 || c < 97){
-			System.out.print("please type again: ");
-			c = console.next().charAt(0);
-		}
-		//since this is the last part of the data entry, a blank line lets you see the results clearly
-		System.out.println();
-		return c;
-	}
-
-	private static char[] getHandLetters(Scanner console) {
-		char[] handLetters = new char[LETTERS_IN_A_HAND];
-		for (int i = 0; i < LETTERS_IN_A_HAND; i++){
-			System.out.print("Hand letter " + (i + 1) + ": ");
-			char c = console.next().charAt(0);
-			while (c > 122 || c < 97){
-				System.out.print("please type again: ");
-				c = console.next().charAt(0);
-			}
-			handLetters[i] = c;
-		}
-		return handLetters;
-	}
-
-	private static ArrayList<String> getAllWords(ArrayList<String> dictionary, char[] handLetters, char boardLetter) {
+	private static ArrayList<String> getAllWordsWithBoardLetter(ArrayList<String> dictionary, char[] handLetters, char boardLetter) {
 		ArrayList<String> allWords = new ArrayList<String>();
 		for (String s : dictionary){
 			if (s.contains(boardLetter + "")){
@@ -169,10 +145,13 @@ public class Processor {
 		return true;
 	}
 
-	public static TileType[][] getBoardSurroundings(Scanner console){
-		System.out.println("First Type horizontal multiplyers, then vertical ones");
-		System.out.println("1: blank, 2: double letter, 3: triple letter, 4: double word, 5: triple word.");
+	public static TileType[][] getMultipliersWithBoardLetter(TileType[][] board, int boardLetterX, int boardLetterY){
 		TileType[][] multipliers = new TileType[2][15];
+
+		for (int i = 0; i < Board.SIZE; i++){
+			multipliers[0][i] = board[boardLetterY][boardLetterX - i];
+		}
+		System.out.println("1: blank, 2: double letter, 3: triple letter, 4: double word, 5: triple word.");
 		for(int i = 0; i < 2; i++){
 			for(int j = 0; j < 15; j++){
 				if(j == LETTERS_IN_A_HAND){
@@ -185,11 +164,11 @@ public class Processor {
 						s = "Vertical";
 					}
 					System.out.print(s + " #" + (j + 1) + ": ");
-					int a = console.nextInt();
-					while (a > 5 || a < 0){
-						System.out.print("please type again: ");
-						a = console.nextInt();
-					}
+//					int a = console.nextInt();
+//					while (a > 5 || a < 0){
+//						System.out.print("please type again: ");
+//						a = console.nextInt();
+//					}
 					switch (a){
 					case 1:
 						multipliers[i][j] = TileType.BLANK;

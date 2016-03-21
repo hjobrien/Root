@@ -140,7 +140,8 @@ public class Board extends Application{
 
 
 	private int[][] getBoardState() {
-		
+		//TODO
+		return null;
 	}
 
 	
