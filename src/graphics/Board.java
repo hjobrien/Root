@@ -2,8 +2,10 @@ package graphics;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -23,11 +25,16 @@ public class Board extends Application{
 	}
 
 	
-	public void dispatchSolver() {
+	public void dispatchSolver(String[][] boardState) {
+		try{
+		long t1 = System.currentTimeMillis();
 		/**
 		 * put runner coder here
 		 */
-		
+		System.out.println("Solver Finished in " + (t1 - System.currentTimeMillis()) + " Milliseconds");
+		}catch (Exception e){
+			System.out.println("Error: Solver threw exception");
+		}
 	}
 	
 	
@@ -39,21 +46,21 @@ public class Board extends Application{
 	@Override
 	public void start(Stage arg0) throws Exception {
 			String[][] tileColors = new String[][]{
-				{"red", "white", "white", "lightblue", "white", "white", "white", "red", "white", "white", "white", "lightblue", "white", "white", "red"},							
-				{"white", "pink", "white", "white", "white", "blue", "white", "white", "white", "blue", "white", "white", "white", "pink", "white"},							
-				{"white", "white", "pink", "white", "white", "white", "lightblue", "white", "lightblue", "white", "white", "white", "pink", "white", "white"},							
-				{"lightblue", "white", "white", "pink", "white", "white", "white", "lightblue", "white", "white", "white", "pink", "white", "white", "lightblue"},							
-				{"white", "white", "white", "white", "pink", "white", "white", "white", "white", "white", "pink", "white", "white", "white", "white"},							
-				{"white", "blue", "white", "white", "white", "blue", "white", "white", "white", "blue", "white", "white", "white", "blue", "white"},							
-				{"white", "white", "lightblue", "white", "white", "white", "lightblue", "white", "lightblue", "white", "white", "white", "lightblue", "white", "white"},							
-				{"red", "white", "white", "lightblue", "white", "white", "white", "hotpink", "white", "white", "white", "lightblue", "white", "white", "red"},							
-				{"white", "white", "lightblue", "white", "white", "white", "lightblue", "white", "lightblue", "white", "white", "white", "lightblue", "white", "white"},							
-				{"white", "blue", "white", "white", "white", "blue", "white", "white", "white", "blue", "white", "white", "white", "blue", "white"},							
-				{"white", "white", "white", "white", "pink", "white", "white", "white", "white", "white", "pink", "white", "white", "white", "white"},							
-				{"lightblue", "white", "white", "pink", "white", "white", "white", "lightblue", "white", "white", "white", "pink", "white", "white", "lightblue"},							
-				{"white", "white", "pink", "white", "white", "white", "lightblue", "white", "lightblue", "white", "white", "white", "pink", "white", "white"},							
-				{"white", "pink", "white", "white", "white", "blue", "white", "white", "white", "blue", "white", "white", "white", "pink", "white"},							
-				{"red", "white", "white", "lightblue", "white", "white", "white", "red", "white", "white", "white", "lightblue", "white", "white", "red"}						
+				{"red", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "red", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "red"},							
+				{"lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey"},							
+				{"lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey"},							
+				{"lightblue", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightblue"},							
+				{"lightgrey", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "lightgrey"},							
+				{"lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey"},							
+				{"lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey"},							
+				{"red", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "hotpink", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "red"},							
+				{"lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey"},							
+				{"lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey"},							
+				{"lightgrey", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "lightgrey"},							
+				{"lightblue", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightblue"},							
+				{"lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey"},							
+				{"lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey"},							
+				{"red", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "red", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "red"}						
 			};
 		Stage main = new Stage();
 		main.addEventFilter(KeyEvent.KEY_PRESSED, e ->{
@@ -62,7 +69,6 @@ public class Board extends Application{
 			}
 		});
 		GridPane boardGrid = new GridPane();
-		Scene boardScene = new Scene(boardGrid);
 		for(int i = 0; i < 15; i++){
 			boardGrid.getColumnConstraints().add(new ColumnConstraints(SQUARE_SIZE));
 			boardGrid.getRowConstraints().add(new RowConstraints(SQUARE_SIZE));
@@ -99,11 +105,30 @@ public class Board extends Application{
 					StackPane.setAlignment(letterDialogue, Pos.CENTER);
 					letterStage.setScene(new Scene(letterPane));
 					letterStage.show();
-					dispatchSolver();
+//					dispatchSolver();
 				});
 				boardGrid.add(a,i,j);
 			}
 		}
+		GridPane mainGrid = new GridPane();
+		mainGrid.add(boardGrid, 0, 0);
+		VBox utilBox = new VBox();
+		TextArea validWords = new TextArea("Possible Words:");
+		validWords.setEditable(false);
+		validWords.setMaxWidth(300);
+		validWords.setMinHeight(600);
+		Button clearLetters = new Button("Clear Board");
+		clearLetters.setOnAction(e ->{
+			for(Node n : boardGrid.getChildren()){
+				if(n instanceof Button){
+					Button b = (Button) n;
+					b.setText("");
+				}
+			}
+		});
+		utilBox.getChildren().addAll(validWords, clearLetters);
+		mainGrid.add(utilBox, 1, 0);
+		Scene boardScene = new Scene(mainGrid);
 		boardGrid.setGridLinesVisible(true);
 		main.setScene(boardScene);
 		main.show();
