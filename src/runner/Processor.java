@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import graphics.Board;
+import graphics.TileType;
 
 public class Processor {
 	public static final HashMap<Character, Integer> letterMapping = new HashMap<Character, Integer>(26);
@@ -15,8 +16,7 @@ public class Processor {
 	private static final int MIN_SCORE = 10;
 
 	public static void run(TileType[][] board, char[] handLetters, char boardLetter, int boardLetterX, 
-			int boardLetterY) 
-			throws FileNotFoundException {
+			int boardLetterY) throws FileNotFoundException {
 		setLetterMapping();
 		ArrayList<String> dictionary = processDictionary();
 		TileType[][] multipliersWithBoardLetter = getMultipliersWithBoardLetter(board, boardLetterX, 
