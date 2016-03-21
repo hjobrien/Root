@@ -26,7 +26,7 @@ public class Board extends Application{
 	}
 
 	
-	public void dispatchSolver(int[][] boardState) {
+	public void dispatchSolver(Tile[][] boardState) {
 		try{
 		long t1 = System.currentTimeMillis();
 		/**
@@ -46,7 +46,7 @@ public class Board extends Application{
 	
 	@Override
 	public void start(Stage arg0) throws Exception {
-			Tile[][] tileColors = new Tile[][]{
+			Tile[][] tiles = new Tile[][]{
 				{new Tile(5), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(5), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(5)},							
 				{new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1)},							
 				{new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1)},							
@@ -81,7 +81,7 @@ public class Board extends Application{
 				a.setMinHeight(SQUARE_SIZE);
 				a.setMinWidth(SQUARE_SIZE);
 				//21 is the highest number that shows all the letters
-				a.setStyle("-fx-font-size: 21; -fx-base: " + tileColors[i][j].getColor());
+				a.setStyle("-fx-font-size: 21; -fx-base: " + tiles[i][j].getColor());
 
 				final Button localButton = a;
 				a.setOnAction(e ->{
@@ -109,7 +109,7 @@ public class Board extends Application{
 					StackPane.setAlignment(letterDialogue, Pos.CENTER);
 					letterStage.setScene(new Scene(letterPane));
 					letterStage.show();
-//					dispatchSolver(getBoardState());
+					dispatchSolver(tiles);
 				});
 				boardGrid.add(a,i,j);
 			}
@@ -136,12 +136,6 @@ public class Board extends Application{
 		boardGrid.setGridLinesVisible(true);
 		main.setScene(boardScene);
 		main.show();
-	}
-
-
-	private int[][] getBoardState() {
-		//TODO
-		return null;
 	}
 
 	
