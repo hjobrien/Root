@@ -8,7 +8,8 @@ public enum TileType {
 	TRIPLE_LETTER(3),				//3
 	DOUBLE_WORD(4),					//4
 	TRIPLE_WORD(5),					//5	
-	BOARD_LETTER(6);				//6
+	BOARD_LETTER(6),				//6
+	CENTER(7);						//7
 	
 	private final int value;
 
@@ -19,4 +20,5 @@ public enum TileType {
     public int getValue() {
         return value;
     }
+
 }

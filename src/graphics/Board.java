@@ -19,13 +19,14 @@ import javafx.stage.Stage;
 public class Board extends Application{
 	
 	public static final int SQUARE_SIZE = 50;
+	public static final int SIZE = 15;
 	
 	public static void main(String[] args){
 		launch(args);
 	}
 
 	
-	public void dispatchSolver(String[][] boardState) {
+	public void dispatchSolver(int[][] boardState) {
 		try{
 		long t1 = System.currentTimeMillis();
 		/**
@@ -45,22 +46,22 @@ public class Board extends Application{
 	
 	@Override
 	public void start(Stage arg0) throws Exception {
-			String[][] tileColors = new String[][]{
-				{"red", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "red", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "red"},							
-				{"lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey"},							
-				{"lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey"},							
-				{"lightblue", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightblue"},							
-				{"lightgrey", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "lightgrey"},							
-				{"lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey"},							
-				{"lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey"},							
-				{"red", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "hotpink", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "red"},							
-				{"lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey"},							
-				{"lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey"},							
-				{"lightgrey", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "lightgrey"},							
-				{"lightblue", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightblue"},							
-				{"lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey", "lightgrey"},							
-				{"lightgrey", "pink", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "blue", "lightgrey", "lightgrey", "lightgrey", "pink", "lightgrey"},							
-				{"red", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "lightgrey", "red", "lightgrey", "lightgrey", "lightgrey", "lightblue", "lightgrey", "lightgrey", "red"}						
+			Tile[][] tileColors = new Tile[][]{
+				{new Tile(5), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(5), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(5)},							
+				{new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1)},							
+				{new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1)},							
+				{new Tile(2), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(2)},							
+				{new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(1)},							
+				{new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1)},							
+				{new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1)},							
+				{new Tile(5), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(7), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(5)},							
+				{new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1)},							
+				{new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1)},							
+				{new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(1)},							
+				{new Tile(2), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(2)},							
+				{new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1)},							
+				{new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1)},							
+				{new Tile(5), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(5), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(5)}						
 			};
 		Stage main = new Stage();
 		main.addEventFilter(KeyEvent.KEY_PRESSED, e ->{
@@ -74,13 +75,13 @@ public class Board extends Application{
 			boardGrid.getRowConstraints().add(new RowConstraints(SQUARE_SIZE));
 		}
 		Button a = new Button("");
-		for(int i = 0; i < 15; i++){
-			for(int j = 0; j < 15; j++){
+		for(int i = 0; i < SIZE; i++){
+			for(int j = 0; j < SIZE; j++){
 				a = new Button("");
 				a.setMinHeight(SQUARE_SIZE);
 				a.setMinWidth(SQUARE_SIZE);
 				//21 is the highest number that shows all the letters
-				a.setStyle("-fx-font-size: 21; -fx-base: " + tileColors[i][j]);
+				a.setStyle("-fx-font-size: 21; -fx-base: " + tileColors[i][j].getColor());
 
 				final Button localButton = a;
 				a.setOnAction(e ->{
@@ -89,9 +90,12 @@ public class Board extends Application{
 					letterStage.setMinHeight(100);
 					VBox letterDialogue = new VBox();
 					letterDialogue.setAlignment(Pos.CENTER);
-					TextField text = new TextField("Type a Letter");
+					TextField text = new TextField();
+					text.setFocusTraversable(false);
+					text.setPromptText("Type a Letter");
 					text.setMaxWidth(100);
 					Button close = new Button("Close");
+					close.setFocusTraversable(false);
 					close.setOnAction(f ->{
 						localButton.setText(text.getText().toUpperCase());
 						letterStage.close();
@@ -105,7 +109,7 @@ public class Board extends Application{
 					StackPane.setAlignment(letterDialogue, Pos.CENTER);
 					letterStage.setScene(new Scene(letterPane));
 					letterStage.show();
-//					dispatchSolver();
+//					dispatchSolver(getBoardState());
 				});
 				boardGrid.add(a,i,j);
 			}
@@ -132,6 +136,11 @@ public class Board extends Application{
 		boardGrid.setGridLinesVisible(true);
 		main.setScene(boardScene);
 		main.show();
+	}
+
+
+	private int[][] getBoardState() {
+		
 	}
 
 	
