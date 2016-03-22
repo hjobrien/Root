@@ -16,11 +16,13 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import runner.Processor;
 
 public class Board extends Application{
 	
 	public static final int SQUARE_SIZE = 50;
 	public static final int SIZE = 15;
+	public static final boolean USE_ENUM = true;
 	
 	private String handLetters = "ABCDEFG";
 
@@ -49,22 +51,38 @@ public class Board extends Application{
 
 	
 	public void dispatchSolver(String handLetters, char boardLetter, int boardLetterX, int boardLetterY) {
+		try{
+		long t1 = System.currentTimeMillis();
+		/**
+		 * put runner coder here
+		 */
+		if(USE_ENUM)
+			Processor.run(getTilesAsEnum(), handLetters.toCharArray(), boardLetter, boardLetterX, boardLetterY);
+		System.out.println("Solver Finished in " + (t1 - System.currentTimeMillis()) + " Milliseconds");
+		}catch (Exception e){
+			System.err.println("Error: Solver threw exception");
+			e.printStackTrace(System.err);
+		}
+	}
+	
+	private int[][] getTilesAsInt(){
 		int[][] tileType = new int[SIZE][SIZE];
 		for(int i = 0; i < SIZE; i++){
 			for(int j = 0; j < SIZE; j++){
 				tileType[i][j] = BLANK_BOARD[i][j].getType();
 			}
 		}
-		try{
-		long t1 = System.currentTimeMillis();
-		/**
-		 * put runner coder here
-		 */
-//		Processor.run(BLANK_BOARD, handLetters.toCharArray(), boardLetter, boardLetterX, boardLetterY);
-		System.out.println("Solver Finished in " + (t1 - System.currentTimeMillis()) + " Milliseconds");
-		}catch (Exception e){
-			System.err.println("Error: Solver threw exception");
+		return tileType;
+	}
+	
+	private TileType[][] getTilesAsEnum(){
+		TileType[][] tileType = new TileType[SIZE][SIZE];
+		for(int i = 0; i < SIZE; i++){
+			for(int j = 0; j < SIZE; j++){
+				tileType[i][j] = TileType.values()[BLANK_BOARD[i][j].getType()];
+			}
 		}
+		return tileType;
 	}
 	
 	
