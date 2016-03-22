@@ -131,8 +131,6 @@ public class Board extends Application{
 					Button close = new Button("Close");
 					close.setFocusTraversable(false);
 					
-					//TODO
-					//Should also respond to enter being pressed
 					close.setOnAction(f ->{
 						localButton.setText(text.getText().toUpperCase());
 						letterStage.close();
