@@ -141,8 +141,7 @@ public class Board extends Application{
 					text.setOnAction(f ->{
 						localButton.setText(text.getText().toUpperCase());
 						letterStage.close();
-						dispatchSolver(handLetters, text.getText().toLowerCase().toCharArray()[0], x,y);
-					});
+						validWords.setText("Possible Words: \n" + wordToString(dispatchSolver(handLetters, text.getText().toLowerCase().toCharArray()[0], x,y)));					});
 					letterDialogue.getChildren().addAll(text,close);
 					StackPane letterPane = new StackPane(letterDialogue);
 					StackPane.setAlignment(letterDialogue, Pos.CENTER);
@@ -216,7 +215,7 @@ public class Board extends Application{
 	private String wordToString(ArrayList<Word> validWords) {
 		String words = "";
 		for(Word w : validWords){
-			words += w.getWord() + " " + w.getScore() + "\n";
+			words += w.getWord() + "\n";
 		}
 		return words;
 	}
