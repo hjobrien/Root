@@ -54,24 +54,23 @@ public class Board extends Application{
 
 	
 	public ArrayList<Word> dispatchSolver(String handLetters, char boardLetter, int boardLetterX, int boardLetterY) {
+		ArrayList<Word> validWords = new ArrayList<Word>();
 		try{
-			long t1 = System.currentTimeMillis();
-			/**
-			 * put runner coder here
-			 */
-			if(USE_ENUM){
-				if (boardLetter < 97){
-					boardLetter += 32;
-				}
-				return Processor.run(getTilesAsEnum(), handLetters.toLowerCase().toCharArray(), boardLetter, boardLetterX, boardLetterY);
-			} else {
-	//			return Processor.run(getTilesAsInt(), handLetters.toCharArray(), boardLetter, boardLetterX, boardLetterY);
-			}
-			System.out.println("Solver Finished in " + (t1 - System.currentTimeMillis()) + " Milliseconds");
-			}catch (Exception e){
-				System.err.println("Error: Solver threw exception");
-				e.printStackTrace(System.err);
-		} throw new RuntimeException("Processor Errored, could not return value");
+		long t1 = System.currentTimeMillis();
+		/**
+		 * put runner coder here
+		 */
+		if(USE_ENUM){
+			validWords = Processor.run(getTilesAsEnum(), handLetters.toCharArray(), boardLetter, boardLetterX, boardLetterY);
+		} else {
+//			validWords = Processor.run(getTilesAsInt(), handLetters.toCharArray(), boardLetter, boardLetterX, boardLetterY);
+		}
+		System.out.println("Solver Finished in " + (System.currentTimeMillis() - t1) + " Milliseconds");
+		}catch (Exception e){
+			System.err.println("Error: Solver threw exception");
+			e.printStackTrace(System.err);
+		}
+		return validWords;
 	}
 	
 	private int[][] getTilesAsInt(){
