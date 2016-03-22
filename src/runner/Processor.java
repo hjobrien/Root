@@ -76,6 +76,10 @@ public class Processor {
 			}
 		}
 		
+		if (allHighScoringWords.isEmpty()){
+			allHighScoringWords.add(new Word("No words", 0));
+		}
+		
 		Collections.sort(allHighScoringWords);
 		
 		if (allHighScoringWords.size() > 5){

@@ -27,7 +27,7 @@ public class Board extends Application{
 	public static final int SIZE = 15;
 	public static final boolean USE_ENUM = true;
 	
-	private String handLetters = "ABCDEFG";
+	private String handLetters = "abcdefg";
 
 	
 	public static final Tile[][] BLANK_BOARD = new Tile[][]{
@@ -129,15 +129,18 @@ public class Board extends Application{
 					text.setMaxWidth(100);
 					Button close = new Button("Close");
 					close.setFocusTraversable(false);
+					
+					//TODO
+					//Should also respond to enter being pressed
 					close.setOnAction(f ->{
 						localButton.setText(text.getText().toUpperCase());
 						letterStage.close();
-						validWords.setText("Possible Words: \n" + wordToString(dispatchSolver(handLetters, text.getText().toCharArray()[0], x,y)));
+						validWords.setText("Possible Words: \n" + wordToString(dispatchSolver(handLetters, text.getText().toLowerCase().toCharArray()[0], x,y)));
 					});
 					text.setOnAction(f ->{
 						localButton.setText(text.getText().toUpperCase());
 						letterStage.close();
-						dispatchSolver(handLetters, text.getText().toCharArray()[0], x,y);
+						dispatchSolver(handLetters, text.getText().toLowerCase().toCharArray()[0], x,y);
 					});
 					letterDialogue.getChildren().addAll(text,close);
 					StackPane letterPane = new StackPane(letterDialogue);
