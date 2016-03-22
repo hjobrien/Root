@@ -19,6 +19,7 @@ public class Processor {
 			int boardLetterY) throws FileNotFoundException {
 		setLetterMapping();
 		ArrayList<String> dictionary = processDictionary();
+		ArrayList<String> twoLetterDictionary = processTwoLetterDictionary();
 		
 		//finding the words that are generated using the board letter
 		TileType[][] multipliersWithBoardLetter = getMultipliersWithBoardLetter(board, boardLetterX, 
@@ -36,7 +37,8 @@ public class Processor {
 		//left down, right down, up across, down across	
 		//TODO
 		TileType[] multipliersLeftDown = getMultipliersDown(board, boardLetterX - 1, boardLetterY);
-		ArrayList<String> allWordsLeftDown = getAllWordsLeftDown();
+		ArrayList<String> allWordsLeftDown = getAllWordsWithBoardLetterEnding(twoLetterDictionary, dictionary, handLetters, 
+				boardLetter);
 		for (String s : allWordsLeftDown){
 			Word w = new Word(s, getScore(s, boardLetterY, multipliersLeftDown));
 			if (w.getScore() > MIN_SCORE){
@@ -45,7 +47,8 @@ public class Processor {
 		}
 		
 		TileType[] multipliersRightDown = getMultipliersDown(board, boardLetterX + 1, boardLetterY);
-		ArrayList<String> allWordsRightDown = getAllWordsRightDown();
+		ArrayList<String> allWordsRightDown = getAllWordsWithBoardLetterStarting(twoLetterDictionary, dictionary, handLetters, 
+				boardLetter);
 		for (String s : allWordsRightDown){
 			Word w = new Word(s, getScore(s, boardLetterY, multipliersRightDown));
 			if (w.getScore() > MIN_SCORE){
@@ -53,8 +56,9 @@ public class Processor {
 			}
 		}
 		
-		TileType[][] multipliersUpAcross = getMultipliersAcross(board, boardLetterY - 1, boardLetterX);
-		ArrayList<String> allWordsUpAcross = getAllWordsAcross();
+		TileType[] multipliersUpAcross = getMultipliersAcross(board, boardLetterY - 1, boardLetterX);
+		ArrayList<String> allWordsUpAcross = getAllWordsWithBoardLetterEnding(twoLetterDictionary, dictionary, handLetters, 
+				boardLetter);
 		for (String s : allWordsUpAcross){
 			Word w = new Word(s, getScore(s, boardLetterX, multipliersUpAcross));
 			if (w.getScore() > MIN_SCORE){
@@ -62,8 +66,9 @@ public class Processor {
 			}
 		}
 		
-		TileType[][] multipliersDownAcross = getMultipliersAcross(board, boardLetterY + 1, boardLetterX);
-		ArrayList<String> allWordsDownAcross = getAllWordsDownAcross();
+		TileType[] multipliersDownAcross = getMultipliersAcross(board, boardLetterY + 1, boardLetterX);
+		ArrayList<String> allWordsDownAcross = getAllWordsWithBoardLetterStarting(twoLetterDictionary, dictionary, handLetters, 
+				boardLetter);		
 		for (String s : allWordsDownAcross){
 			Word w = new Word(s, getScore(s, boardLetterY, multipliersDownAcross));
 			if (w.getScore() > MIN_SCORE){
@@ -80,6 +85,107 @@ public class Processor {
 	}
 
 	
+	private static int getScore(String s, int boardLetterIndex, TileType[] multipliers) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	private static ArrayList<String> processTwoLetterDictionary() throws FileNotFoundException {
+		ArrayList<String> dictionary = new ArrayList<String>();
+		Scanner dictionaryScanner = new Scanner(new File("wordlist.txt"));
+		while (dictionaryScanner.hasNextLine()){
+			String nextWord = dictionaryScanner.nextLine().toLowerCase();
+			if (nextWord.length() == 2){
+				dictionary.add(nextWord);
+			}
+		}
+		dictionaryScanner.close();
+		return dictionary;
+	}
+
+
+	private static ArrayList<String> getAllWordsWithBoardLetterStarting(ArrayList<String> twoLetterDictionary, 
+			ArrayList<String> dictionary, char[] handLetters, char boardLetter) {
+		ArrayList<String> words = new ArrayList<String>();
+		for (String s : twoLetterDictionary){
+			if (s.charAt(0) == boardLetter){
+				String hand = handLetters.toString();
+				if (hand.contains(s.charAt(1) + "")){
+					char[] newHand = getNewHand(handLetters, s.charAt(1));
+					ArrayList<String> tempWords = getAllWordsWithBoardLetter(dictionary, newHand, s.charAt(1));
+					for (String tempS : tempWords){
+						words.add(tempS);
+					}
+				}
+			}
+		}
+		return words;
+	}
+
+	private static ArrayList<String> getAllWordsWithBoardLetterEnding(ArrayList<String> twoLetterDictionary, 
+			ArrayList<String> dictionary, char[] handLetters, char boardLetter) {
+		ArrayList<String> words = new ArrayList<String>();
+		for (String s : twoLetterDictionary){
+			if (s.charAt(1) == boardLetter){
+				String hand = handLetters.toString();
+				if (hand.contains(s.charAt(0) + "")){
+					char[] newHand = getNewHand(handLetters, s.charAt(0));
+					ArrayList<String> tempWords = getAllWordsWithBoardLetter(dictionary, newHand, s.charAt(0));
+					for (String tempS : tempWords){
+						words.add(tempS);
+					}
+				}
+			}
+		}
+		return words;
+	}
+
+	private static char[] getNewHand(char[] handLetters, char c) {
+		char[] newHand = new char[handLetters.length - 1];
+		boolean notFound = true;
+		for (int i = 0; i < handLetters.length; i++){
+			if (notFound){
+				if (handLetters[i] == c){
+					notFound = false;
+				} else {
+					newHand[i] = handLetters[i];
+				}
+			} else {
+				newHand[i - 1] = handLetters[i];
+			}
+		}
+		return newHand;
+	}
+
+	private static TileType[] getMultipliersAcross(TileType[][] board, int row, int column) {
+		TileType[] multipliers = new TileType[Board.SIZE];
+		for (int i = 0; i < Board.SIZE; i++){
+			int xCoord = column - (Board.SIZE / 2) + i;
+			if (xCoord < 0){
+				multipliers[i] = TileType.DOESNT_EXIST;
+			} else {	
+				multipliers[i] = board[row][column - (Board.SIZE / 2) + i];
+			}
+		}
+		return multipliers;
+	}
+
+
+	private static TileType[] getMultipliersDown(TileType[][] board, int column, int row) {
+		TileType[] multipliers = new TileType[Board.SIZE];
+		for (int i = 0; i < Board.SIZE; i++){
+			int yCoord = row - (Board.SIZE / 2) + i;
+			if (yCoord < 0){
+				multipliers[i] = TileType.DOESNT_EXIST;
+			} else {
+				multipliers[i] = board[row - (Board.SIZE / 2) + i][column];
+			}
+		}
+		return multipliers;
+	}
+
+
 	private static int getScore(String s, char boardLetter, TileType[][] multipliers) {
 		
 		int wordScore1 = getWordScore(s, boardLetter, multipliers, 0);
