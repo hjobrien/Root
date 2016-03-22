@@ -13,7 +13,7 @@ import graphics.TileType;
 public class Processor {
 	public static final HashMap<Character, Integer> letterMapping = new HashMap<Character, Integer>(26);
 	private static final int LETTERS_IN_A_HAND = 7;
-	private static final int MIN_SCORE = 10;
+	private static final int MIN_SCORE = 1;
 
 	public static ArrayList<Word> run(TileType[][] board, char[] handLetters, char boardLetter, int boardLetterX, 
 			int boardLetterY) throws FileNotFoundException {
@@ -35,12 +35,11 @@ public class Processor {
 		}
 		
 		//left down, right down, up across, down across	
-		//TODO
 		TileType[] multipliersLeftDown = getMultipliersDown(board, boardLetterX - 1, boardLetterY);
 		ArrayList<String> allWordsLeftDown = getAllWordsWithBoardLetterEnding(twoLetterDictionary, dictionary, handLetters, 
 				boardLetter);
 		for (String s : allWordsLeftDown){
-			Word w = new Word(s, getScore(s, boardLetterY, multipliersLeftDown));
+			Word w = new Word(s, getScore(s, boardLetter, boardLetterY, multipliersLeftDown));
 			if (w.getScore() > MIN_SCORE){
 				allHighScoringWords.add(w);
 			}
@@ -50,7 +49,7 @@ public class Processor {
 		ArrayList<String> allWordsRightDown = getAllWordsWithBoardLetterStarting(twoLetterDictionary, dictionary, handLetters, 
 				boardLetter);
 		for (String s : allWordsRightDown){
-			Word w = new Word(s, getScore(s, boardLetterY, multipliersRightDown));
+			Word w = new Word(s, getScore(s, boardLetter, boardLetterY, multipliersRightDown));
 			if (w.getScore() > MIN_SCORE){
 				allHighScoringWords.add(w);
 			}
@@ -60,7 +59,7 @@ public class Processor {
 		ArrayList<String> allWordsUpAcross = getAllWordsWithBoardLetterEnding(twoLetterDictionary, dictionary, handLetters, 
 				boardLetter);
 		for (String s : allWordsUpAcross){
-			Word w = new Word(s, getScore(s, boardLetterX, multipliersUpAcross));
+			Word w = new Word(s, getScore(s, boardLetter, boardLetterX, multipliersUpAcross));
 			if (w.getScore() > MIN_SCORE){
 				allHighScoringWords.add(w);
 			}
@@ -70,7 +69,7 @@ public class Processor {
 		ArrayList<String> allWordsDownAcross = getAllWordsWithBoardLetterStarting(twoLetterDictionary, dictionary, handLetters, 
 				boardLetter);		
 		for (String s : allWordsDownAcross){
-			Word w = new Word(s, getScore(s, boardLetterY, multipliersDownAcross));
+			Word w = new Word(s, getScore(s, boardLetter, boardLetterY, multipliersDownAcross));
 			if (w.getScore() > MIN_SCORE){
 				allHighScoringWords.add(w);
 			}
@@ -97,12 +96,6 @@ public class Processor {
 			}
 			return allHighScoringWords;
 		}
-	}
-
-	
-	private static int getScore(String s, int boardLetterIndex, TileType[] multipliers) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 
@@ -203,7 +196,92 @@ public class Processor {
 		}
 		return multipliers;
 	}
+	
+	private static int getScore(String s, char boardLetter, int boardLetterIndex, TileType[] multipliers) {
+		// TODO Auto-generated method stub
+		
+		int wordScore = 0;
+		boolean doubleWord = false;
+		boolean tripleWord = false;
+		boolean wordIsPlayable = true;
+		
+		for (char c : s.toCharArray()){
+			int letterScore = letterMapping.get(c);
+			TileType factor = multipliers[LETTERS_IN_A_HAND - (boardLetterIndex - s.indexOf(c))];
+			if (factor.getValue() == 1 || factor.getValue() == 4 || factor.getValue() == 5 || 
+					factor.getValue() == 7){
+				wordScore += letterScore;
+				if (factor.getValue() == 4){
+					doubleWord = true;
+				}
+				if (factor.getValue() == 5){
+					tripleWord = true;
+				}
+			} else if (factor.getValue() == 2){
+				wordScore += letterScore * 2;
+			} else if (factor.getValue() == 3){
+				wordScore += letterScore * 3;
+			} else if (factor.getValue() == 0){
+				wordIsPlayable = false;
+			}
+		}
+		
+		if (!wordIsPlayable){
+			return -1;
+		}
+		if (doubleWord){
+			wordScore *= 2;
+			doubleWord = false;
+		} 
+		if (tripleWord){
+			wordScore *= 3;
+			tripleWord = false;
+		}
+		
+		int wordScore2 = 0;
+		wordScore2 += letterMapping.get(boardLetter);
+		
+		//the hard part
+		//would be good if part of the word was also its two letter piece
+//		int letterScore = letterMapping.get(s.charAt(boardLetterIndex - 1));
+//		TileType factor = multipliers[LETTERS_IN_A_HAND];
+//		if (factor.getValue() == 1 || factor.getValue() == 4 || factor.getValue() == 5 || 
+//				factor.getValue() == 7){
+//			wordScore2 += letterScore;
+//			if (factor.getValue() == 4){
+//				doubleWord = true;
+//			}
+//			if (factor.getValue() == 5){
+//				tripleWord = true;
+//			}
+//		} else if (factor.getValue() == 2){
+//			wordScore2 += letterScore * 2;
+//		} else if (factor.getValue() == 3){
+//			wordScore2 += letterScore * 3;
+//		} else if (factor.getValue() == 0){
+//			wordIsPlayable = false;
+//		}
+//		
+//		if (!wordIsPlayable){
+//			return -1;
+//		}
+//		if (doubleWord){
+//			wordScore2 *= 2;
+//			doubleWord = false;
+//		} 
+//		if (tripleWord){
+//			wordScore2 *= 3;
+//			tripleWord = false;
+//		}
 
+		wordScore += wordScore2;
+		
+		//50 point scrabble bonus for using all letters
+		if (s.length() == 7){
+			wordScore += 50;
+		}
+		return wordScore;
+	}
 
 	private static int getScore(String s, char boardLetter, TileType[][] multipliers) {
 		
@@ -253,12 +331,8 @@ public class Processor {
 			wordScore *= 3;
 		}
 
-		//50 point scrabble bonus for using all letters
-		if (s.contains(boardLetter + "")) {
-			if (s.length() == 8){
-				wordScore += 50;
-			}
-		} else if (s.length() == 7){
+		//50 point scrabble bonus for using all letters (including board letter)
+		if (s.length() == 8){
 			wordScore += 50;
 		}
 		return wordScore;
