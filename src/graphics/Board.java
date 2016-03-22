@@ -219,6 +219,4 @@ public class Board extends Application{
 		}
 		return words;
 	}
-	
-
 }

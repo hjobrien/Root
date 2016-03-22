@@ -30,7 +30,7 @@ public class Main {
 			ArrayList<String> allWords = getAllWords(dictionary, handLetters, boardLetter);
 			ArrayList<Word> allHighScoringWords = new ArrayList<Word>();
 			for (String s : allWords){
-				Word w = new Word(s, getScore(s, boardLetter, multipliers));
+				Word w = new Word(s, boardLetter, multipliers);
 				if (w.getScore() > MIN_SCORE){
 					allHighScoringWords.add(w);
 				}
@@ -43,60 +43,6 @@ public class Main {
 			
 			System.out.println("--------------------------------");
 		}
-	}
-	
-	private static int getScore(String s, char boardLetter, TileType[][] multipliers) {
-		
-		int wordScore1 = getWordScore(s, boardLetter, multipliers, 0);
-		int wordScore2 = getWordScore(s, boardLetter, multipliers, 1);
-		
-		return Math.max(wordScore1, wordScore2);
-	}
-
-	private static int getWordScore(String s, char boardLetter, TileType[][] multipliers, int index) {
-		
-		//might not work if there are multiple instances of the boardLetter in the string
-		int indexOfBoardTile = s.indexOf(boardLetter);
-		
-		int wordScore = 0;
-		boolean doubleWord = false;
-		boolean tripleWord = false;
-		boolean wordIsPlayable = true;
-		for (char c : s.toCharArray()){
-			int letterScore = letterMapping.get(c);
-			TileType factor = multipliers[index][LETTERS_IN_A_HAND - (indexOfBoardTile - s.indexOf(c))];
-			if (factor.getValue() == 1 || factor.getValue() == 4 || factor.getValue() == 5){
-				wordScore += letterScore;
-				if (factor.getValue() == 4){
-					doubleWord = true;
-				}
-				if (factor.getValue() == 5){
-					tripleWord = true;
-				}
-			} else if (factor.getValue() == 2){
-				wordScore += letterScore * 2;
-			} else if (factor.getValue() == 3){
-				wordScore += letterScore * 3;
-			} else if (factor.getValue() == 0){
-				wordIsPlayable = false;
-			}
-		}
-		
-		if (!wordIsPlayable){
-			return -1;
-		}
-		if (doubleWord){
-			wordScore *= 2;
-		} 
-		if (tripleWord){
-			wordScore *= 3;
-		}
-		
-		//50 point scrabble bonus for using all letters
-		if (s.length() == 8){
-			wordScore += 50;
-		}
-		return wordScore;
 	}
 
 	private static ArrayList<String> processDictionary() throws FileNotFoundException {
