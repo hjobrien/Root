@@ -4,20 +4,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Scanner;
 
 import graphics.Board;
 import graphics.TileType;
 
 public class Processor {
-	public static final HashMap<Character, Integer> letterMapping = new HashMap<Character, Integer>(26);
-	private static final int LETTERS_IN_A_HAND = 7;
-	private static final int MIN_SCORE = 1;
+	public static final int LETTERS_IN_A_HAND = 7;
+	public static final int MIN_SCORE = 1;
 
 	public static ArrayList<Word> run(TileType[][] board, char[] handLetters, char boardLetter, int boardLetterX, 
 			int boardLetterY) throws FileNotFoundException {
-		setLetterMapping();
+		Word.setLetterMapping();
 		ArrayList<String> dictionary = processDictionary();
 		ArrayList<String> twoLetterDictionary = processTwoLetterDictionary();
 		
@@ -28,55 +26,52 @@ public class Processor {
 				boardLetter);
 		ArrayList<Word> allHighScoringWords = new ArrayList<Word>();
 		for (String s : allWordsWithBoardLetter){
-			Word w = new Word(s, getScore(s, boardLetter, multipliersWithBoardLetter));
+			Word w = new Word(s, boardLetter, multipliersWithBoardLetter);
 			if (w.getScore() > MIN_SCORE){
 				allHighScoringWords.add(w);
 			}
 		}
 		
+		//TODO
 		//left down, right down, up across, down across	
 		TileType[] multipliersLeftDown = getMultipliersDown(board, boardLetterX - 1, boardLetterY);
-		ArrayList<String> allWordsLeftDown = getAllWordsWithBoardLetterEnding(twoLetterDictionary, dictionary, handLetters, 
-				boardLetter);
-		for (String s : allWordsLeftDown){
-			Word w = new Word(s, getScore(s, boardLetter, boardLetterY, multipliersLeftDown));
+		ArrayList<Word> allWordsLeftDown = getAllWordsWithBoardLetterEnding(twoLetterDictionary, dictionary, handLetters, 
+				boardLetter, multipliersLeftDown);
+		for (Word w : allWordsLeftDown){
 			if (w.getScore() > MIN_SCORE){
 				allHighScoringWords.add(w);
 			}
 		}
 		
 		TileType[] multipliersRightDown = getMultipliersDown(board, boardLetterX + 1, boardLetterY);
-		ArrayList<String> allWordsRightDown = getAllWordsWithBoardLetterStarting(twoLetterDictionary, dictionary, handLetters, 
-				boardLetter);
-		for (String s : allWordsRightDown){
-			Word w = new Word(s, getScore(s, boardLetter, boardLetterY, multipliersRightDown));
+		ArrayList<Word> allWordsRightDown = getAllWordsWithBoardLetterStarting(twoLetterDictionary, dictionary, handLetters, 
+				boardLetter, multipliersRightDown);
+		for (Word w : allWordsRightDown){
 			if (w.getScore() > MIN_SCORE){
 				allHighScoringWords.add(w);
 			}
 		}
 		
 		TileType[] multipliersUpAcross = getMultipliersAcross(board, boardLetterY - 1, boardLetterX);
-		ArrayList<String> allWordsUpAcross = getAllWordsWithBoardLetterEnding(twoLetterDictionary, dictionary, handLetters, 
-				boardLetter);
-		for (String s : allWordsUpAcross){
-			Word w = new Word(s, getScore(s, boardLetter, boardLetterX, multipliersUpAcross));
+		ArrayList<Word> allWordsUpAcross = getAllWordsWithBoardLetterEnding(twoLetterDictionary, dictionary, handLetters, 
+				boardLetter, multipliersUpAcross);
+		for (Word w : allWordsUpAcross){
 			if (w.getScore() > MIN_SCORE){
 				allHighScoringWords.add(w);
 			}
 		}
 		
 		TileType[] multipliersDownAcross = getMultipliersAcross(board, boardLetterY + 1, boardLetterX);
-		ArrayList<String> allWordsDownAcross = getAllWordsWithBoardLetterStarting(twoLetterDictionary, dictionary, handLetters, 
-				boardLetter);		
-		for (String s : allWordsDownAcross){
-			Word w = new Word(s, getScore(s, boardLetter, boardLetterY, multipliersDownAcross));
+		ArrayList<Word> allWordsDownAcross = getAllWordsWithBoardLetterStarting(twoLetterDictionary, dictionary, handLetters, 
+				boardLetter, multipliersDownAcross);		
+		for (Word w : allWordsDownAcross){
 			if (w.getScore() > MIN_SCORE){
 				allHighScoringWords.add(w);
 			}
 		}
 		
 		if (allHighScoringWords.isEmpty()){
-			allHighScoringWords.add(new Word("No words", 0));
+			allHighScoringWords.add(new Word("No words"));
 		}
 		
 		Collections.sort(allHighScoringWords);
@@ -113,9 +108,10 @@ public class Processor {
 	}
 
 
-	private static ArrayList<String> getAllWordsWithBoardLetterStarting(ArrayList<String> twoLetterDictionary, 
-			ArrayList<String> dictionary, char[] handLetters, char boardLetter) {
-		ArrayList<String> words = new ArrayList<String>();
+	private static ArrayList<Word> getAllWordsWithBoardLetterStarting(ArrayList<String> twoLetterDictionary, 
+			ArrayList<String> dictionary, char[] handLetters, char boardLetter, TileType[] multipliers) {
+		
+		ArrayList<Word> words = new ArrayList<Word>();
 		for (String s : twoLetterDictionary){
 			if (s.charAt(0) == boardLetter){
 				String hand = handLetters.toString();
@@ -123,7 +119,7 @@ public class Processor {
 					char[] newHand = getNewHand(handLetters, s.charAt(1));
 					ArrayList<String> tempWords = getAllWordsWithBoardLetter(dictionary, newHand, s.charAt(1));
 					for (String tempS : tempWords){
-						words.add(tempS);
+						words.add(new Word(tempS, "" + s.charAt(0) + s.charAt(1), s.charAt(1), multipliers));
 					}
 				}
 			}
@@ -131,9 +127,9 @@ public class Processor {
 		return words;
 	}
 
-	private static ArrayList<String> getAllWordsWithBoardLetterEnding(ArrayList<String> twoLetterDictionary, 
-			ArrayList<String> dictionary, char[] handLetters, char boardLetter) {
-		ArrayList<String> words = new ArrayList<String>();
+	private static ArrayList<Word> getAllWordsWithBoardLetterEnding(ArrayList<String> twoLetterDictionary, 
+			ArrayList<String> dictionary, char[] handLetters, char boardLetter, TileType[] multipliers) {
+		ArrayList<Word> words = new ArrayList<Word>();
 		for (String s : twoLetterDictionary){
 			if (s.charAt(1) == boardLetter){
 				String hand = handLetters.toString();
@@ -141,7 +137,7 @@ public class Processor {
 					char[] newHand = getNewHand(handLetters, s.charAt(0));
 					ArrayList<String> tempWords = getAllWordsWithBoardLetter(dictionary, newHand, s.charAt(0));
 					for (String tempS : tempWords){
-						words.add(tempS);
+						words.add(new Word(tempS, "" + s.charAt(0) + s.charAt(1), s.charAt(0), multipliers));
 					}
 				}
 			}
@@ -195,147 +191,6 @@ public class Processor {
 			}
 		}
 		return multipliers;
-	}
-	
-	private static int getScore(String s, char boardLetter, int boardLetterIndex, TileType[] multipliers) {
-		// TODO Auto-generated method stub
-		
-		int wordScore = 0;
-		boolean doubleWord = false;
-		boolean tripleWord = false;
-		boolean wordIsPlayable = true;
-		
-		for (char c : s.toCharArray()){
-			int letterScore = letterMapping.get(c);
-			TileType factor = multipliers[LETTERS_IN_A_HAND - (boardLetterIndex - s.indexOf(c))];
-			if (factor.getValue() == 1 || factor.getValue() == 4 || factor.getValue() == 5 || 
-					factor.getValue() == 7){
-				wordScore += letterScore;
-				if (factor.getValue() == 4){
-					doubleWord = true;
-				}
-				if (factor.getValue() == 5){
-					tripleWord = true;
-				}
-			} else if (factor.getValue() == 2){
-				wordScore += letterScore * 2;
-			} else if (factor.getValue() == 3){
-				wordScore += letterScore * 3;
-			} else if (factor.getValue() == 0){
-				wordIsPlayable = false;
-			}
-		}
-		
-		if (!wordIsPlayable){
-			return -1;
-		}
-		if (doubleWord){
-			wordScore *= 2;
-			doubleWord = false;
-		} 
-		if (tripleWord){
-			wordScore *= 3;
-			tripleWord = false;
-		}
-		
-		int wordScore2 = 0;
-		wordScore2 += letterMapping.get(boardLetter);
-		
-		//the hard part
-		//would be good if part of the word was also its two letter piece
-//		int letterScore = letterMapping.get(s.charAt(boardLetterIndex - 1));
-//		TileType factor = multipliers[LETTERS_IN_A_HAND];
-//		if (factor.getValue() == 1 || factor.getValue() == 4 || factor.getValue() == 5 || 
-//				factor.getValue() == 7){
-//			wordScore2 += letterScore;
-//			if (factor.getValue() == 4){
-//				doubleWord = true;
-//			}
-//			if (factor.getValue() == 5){
-//				tripleWord = true;
-//			}
-//		} else if (factor.getValue() == 2){
-//			wordScore2 += letterScore * 2;
-//		} else if (factor.getValue() == 3){
-//			wordScore2 += letterScore * 3;
-//		} else if (factor.getValue() == 0){
-//			wordIsPlayable = false;
-//		}
-//		
-//		if (!wordIsPlayable){
-//			return -1;
-//		}
-//		if (doubleWord){
-//			wordScore2 *= 2;
-//			doubleWord = false;
-//		} 
-//		if (tripleWord){
-//			wordScore2 *= 3;
-//			tripleWord = false;
-//		}
-
-		wordScore += wordScore2;
-		
-		//50 point scrabble bonus for using all letters
-		if (s.length() == 7){
-			wordScore += 50;
-		}
-		return wordScore;
-	}
-
-	private static int getScore(String s, char boardLetter, TileType[][] multipliers) {
-		
-		int wordScore1 = getWordScore(s, boardLetter, multipliers, 0);
-		int wordScore2 = getWordScore(s, boardLetter, multipliers, 1);
-		
-		return Math.max(wordScore1, wordScore2);
-	}
-
-	private static int getWordScore(String s, char boardLetter, TileType[][] multipliers, int index) {
-		
-		//might not work if there are multiple instances of the boardLetter in the string
-		int indexOfBoardTile = s.indexOf(boardLetter);
-		
-		int wordScore = 0;
-		boolean doubleWord = false;
-		boolean tripleWord = false;
-		boolean wordIsPlayable = true;
-		for (char c : s.toCharArray()){
-			int letterScore = letterMapping.get(c);
-			TileType factor = multipliers[index][LETTERS_IN_A_HAND - (indexOfBoardTile - s.indexOf(c))];
-			if (factor.getValue() == 1 || factor.getValue() == 4 || factor.getValue() == 5 || 
-					factor.getValue() == 7){
-				wordScore += letterScore;
-				if (factor.getValue() == 4){
-					doubleWord = true;
-				}
-				if (factor.getValue() == 5){
-					tripleWord = true;
-				}
-			} else if (factor.getValue() == 2){
-				wordScore += letterScore * 2;
-			} else if (factor.getValue() == 3){
-				wordScore += letterScore * 3;
-			} else if (factor.getValue() == 0){
-				wordIsPlayable = false;
-			}
-		}
-		
-		if (!wordIsPlayable){
-			return -1;
-		}
-		if (doubleWord){
-			wordScore *= 2;
-		} 
-		if (tripleWord){
-			wordScore *= 3;
-		}
-
-		//50 point scrabble bonus for using all letters (including board letter)
-		if (s.length() == 8){
-			wordScore += 50;
-		}
-		return wordScore;
 	}
 
 	private static ArrayList<String> processDictionary() throws FileNotFoundException {
@@ -432,32 +287,5 @@ public class Processor {
 		return false;
 	}
 
-	public static void setLetterMapping(){
-		letterMapping.put('a', 1);
-		letterMapping.put('b', 3);
-		letterMapping.put('c', 3);
-		letterMapping.put('d', 2);
-		letterMapping.put('e', 1);
-		letterMapping.put('f', 4);
-		letterMapping.put('g', 2);
-		letterMapping.put('h', 4);
-		letterMapping.put('i', 1);
-		letterMapping.put('j', 8);
-		letterMapping.put('k', 5);
-		letterMapping.put('l', 1);
-		letterMapping.put('m', 3);
-		letterMapping.put('n', 1);
-		letterMapping.put('o', 1);
-		letterMapping.put('p', 3);
-		letterMapping.put('q', 10);
-		letterMapping.put('r', 1);
-		letterMapping.put('s', 1);
-		letterMapping.put('t', 1);
-		letterMapping.put('u', 1);
-		letterMapping.put('v', 4);
-		letterMapping.put('w', 4);
-		letterMapping.put('x', 8);
-		letterMapping.put('y', 4);
-		letterMapping.put('z', 10);
-	}
+	
 }
