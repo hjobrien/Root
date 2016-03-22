@@ -215,7 +215,7 @@ public class Board extends Application{
 	private String wordToString(ArrayList<Word> validWords) {
 		String words = "";
 		for(Word w : validWords){
-			words += w.getWord() + "\n";
+			words += w.toString() + "\n";
 		}
 		return words;
 	}

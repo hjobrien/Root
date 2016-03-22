@@ -15,7 +15,7 @@ public class Word implements Comparable<Object>{
 	
 	@Override
 	public String toString() {
-		return word + " " + score;
+		return word + " " + word2 + " " + score;
 	}
 	
 	public Word(String s){
