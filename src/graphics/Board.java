@@ -1,5 +1,7 @@
 package graphics;
 
+import java.util.ArrayList;
+
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -17,6 +19,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import runner.Processor;
+import runner.Word;
 
 public class Board extends Application{
 	
@@ -50,22 +53,23 @@ public class Board extends Application{
 	}
 
 	
-	public void dispatchSolver(String handLetters, char boardLetter, int boardLetterX, int boardLetterY) {
+	public ArrayList<Word> dispatchSolver(String handLetters, char boardLetter, int boardLetterX, int boardLetterY) {
 		try{
 		long t1 = System.currentTimeMillis();
 		/**
 		 * put runner coder here
 		 */
 		if(USE_ENUM){
-			Processor.run(getTilesAsEnum(), handLetters.toCharArray(), boardLetter, boardLetterX, boardLetterY);
+			return Processor.run(getTilesAsEnum(), handLetters.toCharArray(), boardLetter, boardLetterX, boardLetterY);
 		} else {
-//			Processor.run(getTilesAsInt(), handLetters.toCharArray(), boardLetter, boardLetterX, boardLetterY);
+//			return Processor.run(getTilesAsInt(), handLetters.toCharArray(), boardLetter, boardLetterX, boardLetterY);
 		}
 		System.out.println("Solver Finished in " + (t1 - System.currentTimeMillis()) + " Milliseconds");
 		}catch (Exception e){
 			System.err.println("Error: Solver threw exception");
 			e.printStackTrace(System.err);
 		}
+		throw new RuntimeException("Processor Errored, could not return value");
 	}
 	
 	private int[][] getTilesAsInt(){
@@ -107,6 +111,7 @@ public class Board extends Application{
 			boardGrid.getColumnConstraints().add(new ColumnConstraints(SQUARE_SIZE));
 			boardGrid.getRowConstraints().add(new RowConstraints(SQUARE_SIZE));
 		}
+		TextArea validWords = new TextArea("Possible Words:");
 		Button a = new Button("");
 		for(int i = 0; i < SIZE; i++){
 			for(int j = 0; j < SIZE; j++){
@@ -133,7 +138,7 @@ public class Board extends Application{
 					close.setOnAction(f ->{
 						localButton.setText(text.getText().toUpperCase());
 						letterStage.close();
-						dispatchSolver(handLetters, text.getText().toCharArray()[0], x,y);
+						validWords.setText("Possible Words: \n" + wordToString(dispatchSolver(handLetters, text.getText().toCharArray()[0], x,y)));
 					});
 					text.setOnAction(f ->{
 						localButton.setText(text.getText().toUpperCase());
@@ -153,7 +158,6 @@ public class Board extends Application{
 		mainGrid.add(boardGrid, 0, 0);
 		VBox utilBox = new VBox();
 		utilBox.setAlignment(Pos.TOP_CENTER);
-		TextArea validWords = new TextArea("Possible Words:");
 		validWords.setEditable(false);
 		validWords.setMaxWidth(300);
 		validWords.setMinHeight(600);
@@ -210,6 +214,14 @@ public class Board extends Application{
 		main.show();
 	}
 
+
+	private String wordToString(ArrayList<Word> validWords) {
+		String words = "";
+		for(Word w : validWords){
+			words = words + w.getWord() + "\n";
+		}
+		return words;
+	}
 	
 
 }
