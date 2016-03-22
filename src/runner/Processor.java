@@ -172,8 +172,8 @@ public class Processor {
 	private static TileType[] getMultipliersAcross(TileType[][] board, int row, int column) {
 		TileType[] multipliers = new TileType[Board.SIZE];
 		for (int i = 0; i < Board.SIZE; i++){
-			int xCoord = column - (Board.SIZE / 2) + i - 1 ;
-			if (xCoord < 0 || xCoord >= Board.SIZE){
+			int xCoord = column - (Board.SIZE / 2) + i;
+			if (xCoord < 0 || xCoord >= Board.SIZE || row < 0 || row >= Board.SIZE){
 				multipliers[i] = TileType.DOESNT_EXIST;
 			} else {	
 				multipliers[i] = board[row][xCoord];
@@ -186,8 +186,8 @@ public class Processor {
 	private static TileType[] getMultipliersDown(TileType[][] board, int column, int row) {
 		TileType[] multipliers = new TileType[Board.SIZE];
 		for (int i = 0; i < Board.SIZE; i++){
-			int yCoord = row - (Board.SIZE / 2) + i - 1 ;
-			if (yCoord < 0 || yCoord >= Board.SIZE){
+			int yCoord = row - (Board.SIZE / 2) + i;
+			if (yCoord < 0 || yCoord >= Board.SIZE || column < 0 || column >= Board.SIZE){
 				multipliers[i] = TileType.DOESNT_EXIST;
 			} else {
 				multipliers[i] = board[yCoord][column];
