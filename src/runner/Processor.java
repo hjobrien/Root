@@ -78,11 +78,21 @@ public class Processor {
 		
 		Collections.sort(allHighScoringWords);
 		
-		ArrayList<Word> topWords = new ArrayList<Word>();
-		for (int i = 0; i < 5; i++){
-			topWords.add(allHighScoringWords.get(i));
+		if (allHighScoringWords.size() > 5){
+			ArrayList<Word> topWords = new ArrayList<Word>();
+			for (int i = 0; i < 5; i++){
+				topWords.add(allHighScoringWords.get(i));
+			}
+			for (Word w : topWords){
+				System.out.println(w.getWord() + " " + w.getScore());
+			}
+			return topWords;
+		} else {
+			for (Word w : allHighScoringWords){
+				System.out.println(w.getWord() + " " + w.getScore());
+			}
+			return allHighScoringWords;
 		}
-		return topWords;
 	}
 
 	
@@ -162,11 +172,11 @@ public class Processor {
 	private static TileType[] getMultipliersAcross(TileType[][] board, int row, int column) {
 		TileType[] multipliers = new TileType[Board.SIZE];
 		for (int i = 0; i < Board.SIZE; i++){
-			int xCoord = column - (Board.SIZE / 2) + i;
-			if (xCoord < 0 || xCoord > Board.SIZE){
+			int xCoord = column - (Board.SIZE / 2) + i - 1 ;
+			if (xCoord < 0 || xCoord >= Board.SIZE){
 				multipliers[i] = TileType.DOESNT_EXIST;
 			} else {	
-				multipliers[i] = board[row][column - (Board.SIZE / 2) + i];
+				multipliers[i] = board[row][xCoord];
 			}
 		}
 		return multipliers;
@@ -176,11 +186,11 @@ public class Processor {
 	private static TileType[] getMultipliersDown(TileType[][] board, int column, int row) {
 		TileType[] multipliers = new TileType[Board.SIZE];
 		for (int i = 0; i < Board.SIZE; i++){
-			int yCoord = row - (Board.SIZE / 2) + i;
-			if (yCoord < 0 || yCoord > Board.SIZE){
+			int yCoord = row - (Board.SIZE / 2) + i - 1 ;
+			if (yCoord < 0 || yCoord >= Board.SIZE){
 				multipliers[i] = TileType.DOESNT_EXIST;
 			} else {
-				multipliers[i] = board[row - (Board.SIZE / 2) + i][column];
+				multipliers[i] = board[yCoord][column];
 			}
 		}
 		return multipliers;
@@ -310,18 +320,18 @@ public class Processor {
 			
 			//horizontal
 			int xCoord = boardLetterX - (Board.SIZE / 2) + i;
-			if (xCoord < 0){
+			if (xCoord < 0 || xCoord >= Board.SIZE){
 				multipliers[0][i] = TileType.DOESNT_EXIST;
 			} else {	
-				multipliers[0][i] = board[boardLetterY][boardLetterX - (Board.SIZE / 2) + i];
+				multipliers[0][i] = board[boardLetterY][xCoord];
 			}
 			
 			//vertical
 			int yCoord = boardLetterY - (Board.SIZE / 2) + i;
-			if (yCoord < 0){
+			if (yCoord < 0 || yCoord >= Board.SIZE ){
 				multipliers[1][i] = TileType.DOESNT_EXIST;
 			} else {
-				multipliers[1][i] = board[boardLetterY - (Board.SIZE / 2) + i][boardLetterX];
+				multipliers[1][i] = board[yCoord][boardLetterX];
 			}
 		}
 		
