@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -21,12 +22,36 @@ public class Board extends Application{
 	public static final int SQUARE_SIZE = 50;
 	public static final int SIZE = 15;
 	
+	public static final Tile[][] BLANK_BOARD = new Tile[][]{
+		{new Tile(5), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(5), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(5)},							
+		{new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1)},							
+		{new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1)},							
+		{new Tile(2), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(2)},							
+		{new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(1)},							
+		{new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1)},							
+		{new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1)},							
+		{new Tile(5), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(7), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(5)},							
+		{new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1)},							
+		{new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1)},							
+		{new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(1)},							
+		{new Tile(2), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(2)},							
+		{new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1)},							
+		{new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1)},							
+		{new Tile(5), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(5), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(5)}						
+	};
+	
 	public static void main(String[] args){
 		launch(args);
 	}
 
 	
-	public void dispatchSolver(Tile[][] boardState) {
+	public void dispatchSolver() {
+		int[][] tileType = new int[SIZE][SIZE];
+		for(int i = 0; i < SIZE; i++){
+			for(int j = 0; j < SIZE; j++){
+				tileType[i][j] = BLANK_BOARD[i][j].getType();
+			}
+		}
 		try{
 		long t1 = System.currentTimeMillis();
 		/**
@@ -46,23 +71,6 @@ public class Board extends Application{
 	
 	@Override
 	public void start(Stage arg0) throws Exception {
-			Tile[][] tiles = new Tile[][]{
-				{new Tile(5), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(5), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(5)},							
-				{new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1)},							
-				{new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1)},							
-				{new Tile(2), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(2)},							
-				{new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(1)},							
-				{new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1)},							
-				{new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1)},							
-				{new Tile(5), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(7), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(5)},							
-				{new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1)},							
-				{new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1)},							
-				{new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(1)},							
-				{new Tile(2), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(2)},							
-				{new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1), new Tile(1)},							
-				{new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1)},							
-				{new Tile(5), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(5), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(5)}						
-			};
 		Stage main = new Stage();
 		main.addEventFilter(KeyEvent.KEY_PRESSED, e ->{
 			if(e.getCode() == KeyCode.ESCAPE){
@@ -81,7 +89,7 @@ public class Board extends Application{
 				a.setMinHeight(SQUARE_SIZE);
 				a.setMinWidth(SQUARE_SIZE);
 				//21 is the highest number that shows all the letters
-				a.setStyle("-fx-font-size: 21; -fx-base: " + tiles[i][j].getColor());
+				a.setStyle("-fx-font-size: 21; -fx-base: " + BLANK_BOARD[i][j].getColor());
 
 				final Button localButton = a;
 				a.setOnAction(e ->{
@@ -99,17 +107,18 @@ public class Board extends Application{
 					close.setOnAction(f ->{
 						localButton.setText(text.getText().toUpperCase());
 						letterStage.close();
+						dispatchSolver();
 					});
 					text.setOnAction(f ->{
 						localButton.setText(text.getText().toUpperCase());
 						letterStage.close();
+						dispatchSolver();
 					});
 					letterDialogue.getChildren().addAll(text,close);
 					StackPane letterPane = new StackPane(letterDialogue);
 					StackPane.setAlignment(letterDialogue, Pos.CENTER);
 					letterStage.setScene(new Scene(letterPane));
 					letterStage.show();
-					dispatchSolver(tiles);
 				});
 				boardGrid.add(a,i,j);
 			}
@@ -117,6 +126,7 @@ public class Board extends Application{
 		GridPane mainGrid = new GridPane();
 		mainGrid.add(boardGrid, 0, 0);
 		VBox utilBox = new VBox();
+		utilBox.setAlignment(Pos.CENTER);
 		TextArea validWords = new TextArea("Possible Words:");
 		validWords.setEditable(false);
 		validWords.setMaxWidth(300);
@@ -130,7 +140,35 @@ public class Board extends Application{
 				}
 			}
 		});
-		utilBox.getChildren().addAll(validWords, clearLetters);
+		clearLetters.setMinWidth(300);
+		Label handLetters = new Label("-");
+		handLetters.setMinWidth(200);
+		handLetters.setMinHeight(30);
+		Button genLetters = new Button("Generate new letters");
+		genLetters.setMinWidth(300);
+		genLetters.setOnAction(e ->{
+			Stage letterPopup = new Stage();
+			VBox letterPrompt = new VBox();
+			letterPrompt.setAlignment(Pos.CENTER);
+			TextField letterInput = new TextField();
+			letterInput.setFocusTraversable(false);
+			letterInput.setPromptText("A, b, c, D, E, F, G");
+			letterInput.setOnAction(f ->{
+				handLetters.setText(letterInput.getText());
+				letterPopup.close();
+			});
+			Button close = new Button("Close");
+			close.setFocusTraversable(false);
+			close.setOnAction(f ->{
+				handLetters.setText(letterInput.getText());
+				letterPopup.close();
+			});
+			letterPrompt.getChildren().addAll(letterInput, close);
+			Scene letterScene = new Scene(letterPrompt);
+			letterPopup.setScene(letterScene);
+			letterPopup.show();
+		});
+		utilBox.getChildren().addAll(validWords, clearLetters, handLetters, genLetters);
 		mainGrid.add(utilBox, 1, 0);
 		Scene boardScene = new Scene(mainGrid);
 		boardGrid.setGridLinesVisible(true);

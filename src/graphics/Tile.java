@@ -7,6 +7,10 @@ public class Tile {
 		this.type = type;
 	}
 	
+	public int getType(){
+		return type;
+	}
+	
 	public String getColor(){
 		switch(type){
 		case 0:
