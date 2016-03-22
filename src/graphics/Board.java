@@ -56,8 +56,11 @@ public class Board extends Application{
 		/**
 		 * put runner coder here
 		 */
-		if(USE_ENUM)
+		if(USE_ENUM){
 			Processor.run(getTilesAsEnum(), handLetters.toCharArray(), boardLetter, boardLetterX, boardLetterY);
+		} else {
+//			Processor.run(getTilesAsInt(), handLetters.toCharArray(), boardLetter, boardLetterX, boardLetterY);
+		}
 		System.out.println("Solver Finished in " + (t1 - System.currentTimeMillis()) + " Milliseconds");
 		}catch (Exception e){
 			System.err.println("Error: Solver threw exception");

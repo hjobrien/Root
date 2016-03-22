@@ -15,7 +15,7 @@ public class Processor {
 	private static final int LETTERS_IN_A_HAND = 7;
 	private static final int MIN_SCORE = 10;
 
-	public static void run(TileType[][] board, char[] handLetters, char boardLetter, int boardLetterX, 
+	public static ArrayList<Word> run(TileType[][] board, char[] handLetters, char boardLetter, int boardLetterX, 
 			int boardLetterY) throws FileNotFoundException {
 		setLetterMapping();
 		ArrayList<String> dictionary = processDictionary();
@@ -77,11 +77,12 @@ public class Processor {
 		}
 		
 		Collections.sort(allHighScoringWords);
-		for (Word w : allHighScoringWords){
-			System.out.println(w);
-		}
 		
-		System.out.println("--------------------------------");
+		ArrayList<Word> topWords = new ArrayList<Word>();
+		for (int i = 0; i < 5; i++){
+			topWords.add(allHighScoringWords.get(i));
+		}
+		return topWords;
 	}
 
 	
