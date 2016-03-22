@@ -92,12 +92,6 @@ public class Board extends Application{
 		return tileType;
 	}
 	
-	
-	
-	
-	
-	
-	
 	@Override
 	public void start(Stage arg0) throws Exception {
 		Stage main = new Stage();
@@ -218,7 +212,7 @@ public class Board extends Application{
 	private String wordToString(ArrayList<Word> validWords) {
 		String words = "";
 		for(Word w : validWords){
-			words = words + w.getWord() + "\n";
+			words += w.getWord() + " " + w.getScore() + "\n";
 		}
 		return words;
 	}
