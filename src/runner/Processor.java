@@ -162,7 +162,7 @@ public class Processor {
 		TileType[] multipliers = new TileType[Board.SIZE];
 		for (int i = 0; i < Board.SIZE; i++){
 			int xCoord = column - (Board.SIZE / 2) + i;
-			if (xCoord < 0){
+			if (xCoord < 0 || xCoord > Board.SIZE){
 				multipliers[i] = TileType.DOESNT_EXIST;
 			} else {	
 				multipliers[i] = board[row][column - (Board.SIZE / 2) + i];
@@ -176,7 +176,7 @@ public class Processor {
 		TileType[] multipliers = new TileType[Board.SIZE];
 		for (int i = 0; i < Board.SIZE; i++){
 			int yCoord = row - (Board.SIZE / 2) + i;
-			if (yCoord < 0){
+			if (yCoord < 0 || yCoord > Board.SIZE){
 				multipliers[i] = TileType.DOESNT_EXIST;
 			} else {
 				multipliers[i] = board[row - (Board.SIZE / 2) + i][column];
