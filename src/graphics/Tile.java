@@ -22,7 +22,7 @@ public class Tile {
 		case 3:
 			return "blue";
 		case 4:
-			return "pink";
+			return "rgb(255, 153, 153)"; //pink
 		case 5:
 			return "red";
 		case 7:

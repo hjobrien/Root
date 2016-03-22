@@ -22,6 +22,9 @@ public class Board extends Application{
 	public static final int SQUARE_SIZE = 50;
 	public static final int SIZE = 15;
 	
+	private String handLetters = "ABCDEFG";
+
+	
 	public static final Tile[][] BLANK_BOARD = new Tile[][]{
 		{new Tile(5), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(5), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(5)},							
 		{new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1)},							
@@ -45,7 +48,7 @@ public class Board extends Application{
 	}
 
 	
-	public void dispatchSolver() {
+	public void dispatchSolver(String handLetters, char boardLetter, int boardLetterX, int boardLetterY) {
 		int[][] tileType = new int[SIZE][SIZE];
 		for(int i = 0; i < SIZE; i++){
 			for(int j = 0; j < SIZE; j++){
@@ -57,9 +60,10 @@ public class Board extends Application{
 		/**
 		 * put runner coder here
 		 */
+//		Processor.run(BLANK_BOARD, handLetters.toCharArray(), boardLetter, boardLetterX, boardLetterY);
 		System.out.println("Solver Finished in " + (t1 - System.currentTimeMillis()) + " Milliseconds");
 		}catch (Exception e){
-			System.out.println("Error: Solver threw exception");
+			System.err.println("Error: Solver threw exception");
 		}
 	}
 	
@@ -90,7 +94,8 @@ public class Board extends Application{
 				a.setMinWidth(SQUARE_SIZE);
 				//21 is the highest number that shows all the letters
 				a.setStyle("-fx-font-size: 21; -fx-base: " + BLANK_BOARD[i][j].getColor());
-
+				final int x = i;
+				final int y = j;
 				final Button localButton = a;
 				a.setOnAction(e ->{
 					Stage letterStage = new Stage();
@@ -107,12 +112,12 @@ public class Board extends Application{
 					close.setOnAction(f ->{
 						localButton.setText(text.getText().toUpperCase());
 						letterStage.close();
-						dispatchSolver();
+						dispatchSolver(handLetters, text.getText().toCharArray()[0], x,y);
 					});
 					text.setOnAction(f ->{
 						localButton.setText(text.getText().toUpperCase());
 						letterStage.close();
-						dispatchSolver();
+						dispatchSolver(handLetters, text.getText().toCharArray()[0], x,y);
 					});
 					letterDialogue.getChildren().addAll(text,close);
 					StackPane letterPane = new StackPane(letterDialogue);
@@ -126,7 +131,7 @@ public class Board extends Application{
 		GridPane mainGrid = new GridPane();
 		mainGrid.add(boardGrid, 0, 0);
 		VBox utilBox = new VBox();
-		utilBox.setAlignment(Pos.CENTER);
+		utilBox.setAlignment(Pos.TOP_CENTER);
 		TextArea validWords = new TextArea("Possible Words:");
 		validWords.setEditable(false);
 		validWords.setMaxWidth(300);
@@ -141,26 +146,34 @@ public class Board extends Application{
 			}
 		});
 		clearLetters.setMinWidth(300);
-		Label handLetters = new Label("-");
-		handLetters.setMinWidth(200);
-		handLetters.setMinHeight(30);
+		Label letterLabel = new Label("ABCDEFG");
+		letterLabel.setStyle("-fx-font-size: 35");
+		letterLabel.setMinHeight(30);
 		Button genLetters = new Button("Generate new letters");
 		genLetters.setMinWidth(300);
 		genLetters.setOnAction(e ->{
 			Stage letterPopup = new Stage();
+			letterPopup.setMinHeight(100);
+			letterPopup.setMinWidth(250);
 			VBox letterPrompt = new VBox();
 			letterPrompt.setAlignment(Pos.CENTER);
 			TextField letterInput = new TextField();
 			letterInput.setFocusTraversable(false);
 			letterInput.setPromptText("A, b, c, D, E, F, G");
 			letterInput.setOnAction(f ->{
-				handLetters.setText(letterInput.getText());
+				handLetters = letterInput.getText().toUpperCase();
+				handLetters = handLetters.replace(" ", "");
+				handLetters = handLetters.replace(",", "");
+				letterLabel.setText(handLetters);
 				letterPopup.close();
 			});
 			Button close = new Button("Close");
 			close.setFocusTraversable(false);
 			close.setOnAction(f ->{
-				handLetters.setText(letterInput.getText());
+				handLetters = letterInput.getText().toUpperCase();
+				handLetters = handLetters.replace(" ", "");
+				handLetters = handLetters.replace(",", "");
+				letterLabel.setText(handLetters);
 				letterPopup.close();
 			});
 			letterPrompt.getChildren().addAll(letterInput, close);
@@ -168,7 +181,7 @@ public class Board extends Application{
 			letterPopup.setScene(letterScene);
 			letterPopup.show();
 		});
-		utilBox.getChildren().addAll(validWords, clearLetters, handLetters, genLetters);
+		utilBox.getChildren().addAll(validWords, clearLetters, letterLabel, genLetters);
 		mainGrid.add(utilBox, 1, 0);
 		Scene boardScene = new Scene(mainGrid);
 		boardGrid.setGridLinesVisible(true);
