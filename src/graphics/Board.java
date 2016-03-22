@@ -181,7 +181,7 @@ public class Board extends Application{
 			letterPrompt.setAlignment(Pos.CENTER);
 			TextField letterInput = new TextField();
 			letterInput.setFocusTraversable(false);
-			letterInput.setPromptText("A, b, c, D, E, F, G");
+			letterInput.setPromptText("A, B, C, D, E, F, G");
 			letterInput.setOnAction(f ->{
 				handLetters = letterInput.getText().toUpperCase();
 				handLetters = handLetters.replace(" ", "");

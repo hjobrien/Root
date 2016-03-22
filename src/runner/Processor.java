@@ -164,7 +164,11 @@ public class Processor {
 				if (handLetters[i] == c){
 					notFound = false;
 				} else {
-					newHand[i] = handLetters[i];
+					if (i >= 6){
+						System.out.println("error");
+					} else {
+						newHand[i] = handLetters[i];
+					}
 				}
 			} else {
 				newHand[i - 1] = handLetters[i];
