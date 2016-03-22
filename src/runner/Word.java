@@ -114,10 +114,15 @@ public class Word implements Comparable<Object>{
 
 		//50 point scrabble bonus for using all letters (including board letter)
 		if (!word2.equals("")){
+			
+			//TODO doesnt account for tile bonuses
+			for (char c : word2.toCharArray()){
+				wordScore += letterMapping.get(c);
+			}
+			
 			if (word.length() == 7){
 				wordScore += 50;
 			}
-			//TODO needs to add the 2 letter word score as well
 		} else if (word.length() == 8){
 			wordScore += 50;
 		}
