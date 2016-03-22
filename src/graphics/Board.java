@@ -54,22 +54,23 @@ public class Board extends Application{
 
 	
 	public ArrayList<Word> dispatchSolver(String handLetters, char boardLetter, int boardLetterX, int boardLetterY) {
+		ArrayList<Word> validWords = new ArrayList<Word>();
 		try{
 		long t1 = System.currentTimeMillis();
 		/**
 		 * put runner coder here
 		 */
 		if(USE_ENUM){
-			return Processor.run(getTilesAsEnum(), handLetters.toCharArray(), boardLetter, boardLetterX, boardLetterY);
+			validWords = Processor.run(getTilesAsEnum(), handLetters.toCharArray(), boardLetter, boardLetterX, boardLetterY);
 		} else {
-//			return Processor.run(getTilesAsInt(), handLetters.toCharArray(), boardLetter, boardLetterX, boardLetterY);
+//			validWords = Processor.run(getTilesAsInt(), handLetters.toCharArray(), boardLetter, boardLetterX, boardLetterY);
 		}
-		System.out.println("Solver Finished in " + (t1 - System.currentTimeMillis()) + " Milliseconds");
+		System.out.println("Solver Finished in " + (System.currentTimeMillis() - t1) + " Milliseconds");
 		}catch (Exception e){
 			System.err.println("Error: Solver threw exception");
 			e.printStackTrace(System.err);
 		}
-		throw new RuntimeException("Processor Errored, could not return value");
+		return validWords;
 	}
 	
 	private int[][] getTilesAsInt(){
