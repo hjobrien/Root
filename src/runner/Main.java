@@ -16,14 +16,14 @@ public class Main {
 	private static final int MIN_SCORE = 10;
 
 	public static void main(String[] args) throws FileNotFoundException {
-		setLetterMapping();
+		Word.setLetterMapping();
 		ArrayList<String> dictionary = processDictionary();
 		Scanner console = new Scanner(System.in);
 		System.out.print("Enter by hand or from file? (0 for hand, other for file) ");
 		if (!console.nextLine().equals("0")){
 			console = new Scanner(new File("sampleBoard.txt"));
 		}
-		for (;;){
+		for (;;){ 
 			TileType[][] multipliers = getBoardSurroundings(console);
 			char[] handLetters = getHandLetters(console);
 			char boardLetter = getBoardLetter(console);
@@ -191,34 +191,4 @@ public class Main {
 		}
 		return false;
 	}
-
-	public static void setLetterMapping(){
-		letterMapping.put('a', 1);
-		letterMapping.put('b', 3);
-		letterMapping.put('c', 3);
-		letterMapping.put('d', 2);
-		letterMapping.put('e', 1);
-		letterMapping.put('f', 4);
-		letterMapping.put('g', 2);
-		letterMapping.put('h', 4);
-		letterMapping.put('i', 1);
-		letterMapping.put('j', 8);
-		letterMapping.put('k', 5);
-		letterMapping.put('l', 1);
-		letterMapping.put('m', 3);
-		letterMapping.put('n', 1);
-		letterMapping.put('o', 1);
-		letterMapping.put('p', 3);
-		letterMapping.put('q', 10);
-		letterMapping.put('r', 1);
-		letterMapping.put('s', 1);
-		letterMapping.put('t', 1);
-		letterMapping.put('u', 1);
-		letterMapping.put('v', 4);
-		letterMapping.put('w', 4);
-		letterMapping.put('x', 8);
-		letterMapping.put('y', 4);
-		letterMapping.put('z', 10);
-	}
-
 }
