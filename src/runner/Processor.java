@@ -12,6 +12,7 @@ import graphics.TileType;
 public class Processor {
 	public static final int LETTERS_IN_A_HAND = 7;
 	public static final int MIN_SCORE = 1;
+	public static final int ANSWERS_TO_SHOW = 5;
 
 	public static ArrayList<Word> run(TileType[][] board, char[] handLetters, char boardLetter, int boardLetterX, 
 			int boardLetterY) throws FileNotFoundException {
@@ -27,7 +28,7 @@ public class Processor {
 		ArrayList<Word> allHighScoringWords = new ArrayList<Word>();
 		for (String s : allWordsWithBoardLetter){
 			Word w = new Word(s, boardLetter, multipliersWithBoardLetter);
-			if (w.getScore() > MIN_SCORE){
+			if (w.getScore() >= MIN_SCORE){
 				allHighScoringWords.add(w);
 			}
 		}
@@ -76,9 +77,9 @@ public class Processor {
 		
 		Collections.sort(allHighScoringWords);
 		
-		if (allHighScoringWords.size() > 5){
+		if (allHighScoringWords.size() > ANSWERS_TO_SHOW){
 			ArrayList<Word> topWords = new ArrayList<Word>();
-			for (int i = 0; i < 5; i++){
+			for (int i = 0; i < ANSWERS_TO_SHOW; i++){
 				topWords.add(allHighScoringWords.get(i));
 			}
 			for (Word w : topWords){

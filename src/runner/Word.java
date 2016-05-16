@@ -15,9 +15,27 @@ public class Word implements Comparable<Object>{
 	
 	@Override
 	public String toString() {
-		return word + " " + word2 + " " + score;
+		if (word2.equals("")){
+			return processString(word) + " " + score;
+		}
+		return processString(word) + " " + processString(word2) + " " + score;
 	}
 	
+	private String processString(String wordToProcess) {
+		String fullWord = "";
+		int boardLetterIndex = wordToProcess.indexOf(boardLetter);
+		System.out.println(wordToProcess + " " + boardLetterIndex);
+		fullWord += wordToProcess.substring(0, boardLetterIndex);
+		fullWord += "[";
+		fullWord += boardLetter;
+		fullWord += "]";
+		
+		if (boardLetterIndex < wordToProcess.length() - 1){
+			fullWord += wordToProcess.substring(boardLetterIndex + 1);
+		}
+		return fullWord;
+	}
+
 	public Word(String s){
 		this.word = s;
 		score = 0;
