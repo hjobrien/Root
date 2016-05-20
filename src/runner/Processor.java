@@ -11,8 +11,8 @@ import graphics.TileType;
 
 public class Processor {
 	public static final int LETTERS_IN_A_HAND = 7;
-	public static final int MIN_SCORE = 1;
-	public static final int ANSWERS_TO_SHOW = 5;
+	public static final int MIN_SCORE = 12;
+	public static final int ANSWERS_TO_SHOW = 999999999;
 
 	public static ArrayList<Word> run(TileType[][] board, char[] handLetters, char boardLetter, int boardLetterX, 
 			int boardLetterY) throws FileNotFoundException {

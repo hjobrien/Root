@@ -101,8 +101,8 @@ public class Word implements Comparable<Object>{
 		boolean doubleWord = false;
 		boolean tripleWord = false;
 		boolean wordIsPlayable = true;
-		char[] scoringCharArray = getScoringCharArray();
-		for (char c : scoringCharArray){
+//		char[] scoringCharArray = getScoringCharArray();
+		for (char c : word.toCharArray()){
 			int letterScore = letterMapping.get(c);
 			TileType factor = multipliers[Processor.LETTERS_IN_A_HAND - (indexOfBoardTile - word.indexOf(c))];
 			if (factor.getValue() == 1 || factor.getValue() == 4 || factor.getValue() == 5 || 

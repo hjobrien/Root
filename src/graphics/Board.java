@@ -27,7 +27,7 @@ public class Board extends Application{
 	public static final int SIZE = 15;
 	public static final boolean USE_ENUM = true;
 	
-	private String handLetters = "abcdefg";
+	private String handLetters = "cikloot";
 
 	public static final Tile[][] BLANK_BOARD = new Tile[][]{
 		{new Tile(5), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(5), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(5)},							
@@ -165,7 +165,7 @@ public class Board extends Application{
 			}
 		});
 		clearLetters.setMinWidth(300);
-		Label letterLabel = new Label("ABCDEFG");
+		Label letterLabel = new Label("cikloot");
 		letterLabel.setStyle("-fx-font-size: 35");
 		letterLabel.setMinHeight(30);
 		Button genLetters = new Button("Generate new letters");
