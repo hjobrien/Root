@@ -12,13 +12,14 @@ public class Word implements Comparable<Object>{
 	private String word2 = "";
 	private int score;
 	private char boardLetter;
+	private String position;
 	
 	@Override
 	public String toString() {
 		if (word2.equals("")){
 			return processString(word) + " " + score;
 		}
-		return processString(word) + " " + processString(word2) + " " + score;
+		return processString(word) + " " + processString(word2) + " " + score + " " + this.position;
 	}
 	
 	private String processString(String wordToProcess) {
@@ -59,11 +60,12 @@ public class Word implements Comparable<Object>{
 		setScore(multipliers);
 	}
 	
-	public Word(String s1, String s2, char c, TileType[] multipliers){
+	public Word(String s1, String s2, char c, TileType[] multipliers, String position){
 		this.word = s1;
 		this.word2 = s2;
 		this.boardLetter = c;
 		setScore(multipliers);
+		this.position = position;
 	}
 
 	public String getWord() {
@@ -182,5 +184,9 @@ public class Word implements Comparable<Object>{
 		letterMapping.put('x', 8);
 		letterMapping.put('y', 4);
 		letterMapping.put('z', 10);
+	}
+
+	public String getPosition() {
+		return position;
 	}
 }

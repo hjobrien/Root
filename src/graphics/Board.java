@@ -29,7 +29,6 @@ public class Board extends Application{
 	
 	private String handLetters = "abcdefg";
 
-	
 	public static final Tile[][] BLANK_BOARD = new Tile[][]{
 		{new Tile(5), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(1), new Tile(5), new Tile(1), new Tile(1), new Tile(1), new Tile(2), new Tile(1), new Tile(1), new Tile(5)},							
 		{new Tile(1), new Tile(4), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(3), new Tile(1), new Tile(1), new Tile(1), new Tile(4), new Tile(1)},							

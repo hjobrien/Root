@@ -37,7 +37,7 @@ public class Processor {
 		//left down, right down, up across, down across	
 		TileType[] multipliersLeftDown = getMultipliersDown(board, boardLetterX - 1, boardLetterY);
 		ArrayList<Word> allWordsLeftDown = getAllWordsWithBoardLetterEnding(twoLetterDictionary, dictionary, handLetters, 
-				boardLetter, multipliersLeftDown);
+				boardLetter, multipliersLeftDown, "left down");
 		for (Word w : allWordsLeftDown){
 			if (w.getScore() > MIN_SCORE){
 				allHighScoringWords.add(w);
@@ -46,7 +46,7 @@ public class Processor {
 		
 		TileType[] multipliersRightDown = getMultipliersDown(board, boardLetterX + 1, boardLetterY);
 		ArrayList<Word> allWordsRightDown = getAllWordsWithBoardLetterStarting(twoLetterDictionary, dictionary, handLetters, 
-				boardLetter, multipliersRightDown);
+				boardLetter, multipliersRightDown, "right down");
 		for (Word w : allWordsRightDown){
 			if (w.getScore() > MIN_SCORE){
 				allHighScoringWords.add(w);
@@ -55,7 +55,7 @@ public class Processor {
 		
 		TileType[] multipliersUpAcross = getMultipliersAcross(board, boardLetterY - 1, boardLetterX);
 		ArrayList<Word> allWordsUpAcross = getAllWordsWithBoardLetterEnding(twoLetterDictionary, dictionary, handLetters, 
-				boardLetter, multipliersUpAcross);
+				boardLetter, multipliersUpAcross, "up across");
 		for (Word w : allWordsUpAcross){
 			if (w.getScore() > MIN_SCORE){
 				allHighScoringWords.add(w);
@@ -64,7 +64,7 @@ public class Processor {
 		
 		TileType[] multipliersDownAcross = getMultipliersAcross(board, boardLetterY + 1, boardLetterX);
 		ArrayList<Word> allWordsDownAcross = getAllWordsWithBoardLetterStarting(twoLetterDictionary, dictionary, handLetters, 
-				boardLetter, multipliersDownAcross);		
+				boardLetter, multipliersDownAcross, "down across");		
 		for (Word w : allWordsDownAcross){
 			if (w.getScore() > MIN_SCORE){
 				allHighScoringWords.add(w);
@@ -110,7 +110,7 @@ public class Processor {
 
 
 	private static ArrayList<Word> getAllWordsWithBoardLetterStarting(ArrayList<String> twoLetterDictionary, 
-			ArrayList<String> dictionary, char[] handLetters, char boardLetter, TileType[] multipliers) {
+			ArrayList<String> dictionary, char[] handLetters, char boardLetter, TileType[] multipliers, String position) {
 		
 		ArrayList<Word> words = new ArrayList<Word>();
 		for (String s : twoLetterDictionary){
@@ -120,7 +120,7 @@ public class Processor {
 					char[] newHand = getNewHand(handLetters, s.charAt(1));
 					ArrayList<String> tempWords = getAllWordsWithBoardLetter(dictionary, newHand, s.charAt(1));
 					for (String tempS : tempWords){
-						words.add(new Word(tempS, "" + s.charAt(0) + s.charAt(1), s.charAt(1), multipliers));
+						words.add(new Word(tempS, "" + s.charAt(0) + s.charAt(1), s.charAt(1), multipliers, position));
 					}
 				}
 			}
@@ -129,7 +129,7 @@ public class Processor {
 	}
 
 	private static ArrayList<Word> getAllWordsWithBoardLetterEnding(ArrayList<String> twoLetterDictionary, 
-			ArrayList<String> dictionary, char[] handLetters, char boardLetter, TileType[] multipliers) {
+			ArrayList<String> dictionary, char[] handLetters, char boardLetter, TileType[] multipliers, String position) {
 		ArrayList<Word> words = new ArrayList<Word>();
 		for (String s : twoLetterDictionary){
 			if (s.charAt(1) == boardLetter){
@@ -138,7 +138,7 @@ public class Processor {
 					char[] newHand = getNewHand(handLetters, s.charAt(0));
 					ArrayList<String> tempWords = getAllWordsWithBoardLetter(dictionary, newHand, s.charAt(0));
 					for (String tempS : tempWords){
-						words.add(new Word(tempS, "" + s.charAt(0) + s.charAt(1), s.charAt(0), multipliers));
+						words.add(new Word(tempS, "" + s.charAt(0) + s.charAt(1), s.charAt(0), multipliers, position));
 					}
 				}
 			}
