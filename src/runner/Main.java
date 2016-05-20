@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import graphics.TileType;
-
+@Deprecated
 public class Main {
 	
 	public static final HashMap<Character, Integer> letterMapping = new HashMap<Character, Integer>(26);
