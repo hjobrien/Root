@@ -101,7 +101,8 @@ public class Word implements Comparable<Object>{
 		boolean doubleWord = false;
 		boolean tripleWord = false;
 		boolean wordIsPlayable = true;
-		for (char c : word.toCharArray()){
+		char[] scoringCharArray = getScoringCharArray();
+		for (char c : scoringCharArray){
 			int letterScore = letterMapping.get(c);
 			TileType factor = multipliers[Processor.LETTERS_IN_A_HAND - (indexOfBoardTile - word.indexOf(c))];
 			if (factor.getValue() == 1 || factor.getValue() == 4 || factor.getValue() == 5 || 
@@ -147,6 +148,22 @@ public class Word implements Comparable<Object>{
 			wordScore += 50;
 		}
 		return wordScore;
+	}
+
+	private char[] getScoringCharArray() {
+		char[] scoringCharArray = new char[word.length() - 1];
+		int boardLetterPosition = word.indexOf(boardLetter);
+		boolean passedBoardLetter = false;
+		for (int i = 0; i < word.length(); i++){
+			if (i == boardLetterPosition){ 
+				passedBoardLetter = true;
+			} else if (!passedBoardLetter){
+				scoringCharArray[i] = word.charAt(i);
+			} else if (passedBoardLetter){
+				scoringCharArray[i - 1] = word.charAt(i);
+			}
+		}
+		return scoringCharArray;
 	}
 
 	@Override
